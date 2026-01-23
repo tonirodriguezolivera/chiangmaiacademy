@@ -1,0 +1,255 @@
+/* Payment Styles */
+.payment-container,
+.success-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.payment-card,
+.success-card {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 600px;
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.payment-header h1 {
+    font-size: 32px;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.payment-header p {
+    color: var(--text-light);
+}
+
+/* Payment Summary */
+.payment-summary {
+    background: var(--bg-color);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item.total {
+    border-top: 2px solid var(--primary-color);
+    margin-top: 10px;
+    padding-top: 20px;
+    font-size: 20px;
+}
+
+.summary-label {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.summary-value {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.summary-item.total .summary-value {
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+/* Payment Form */
+.payment-form {
+    margin-top: 30px;
+}
+
+.payment-methods {
+    margin-bottom: 30px;
+}
+
+.payment-methods h3 {
+    font-size: 20px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.method-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.method-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.method-option:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-color);
+}
+
+.method-option input[type="radio"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.method-option span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.payment-note {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.payment-note p {
+    margin: 0;
+    color: #856404;
+    font-size: 14px;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.payment-actions .btn {
+    flex: 1;
+}
+
+/* Success Page */
+.success-card {
+    text-align: center;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    margin: 0 auto 30px;
+    font-weight: bold;
+}
+
+.success-card h1 {
+    font-size: 32px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.success-message {
+    font-size: 18px;
+    color: var(--text-light);
+    margin-bottom: 40px;
+}
+
+.success-details {
+    background: var(--bg-color);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.detail-value {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.detail-value code {
+    background: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+.success-info {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.success-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.success-info p {
+    color: #0c5460;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.success-actions {
+    margin-top: 30px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-card,
+    .success-card {
+        padding: 30px 20px;
+    }
+    
+    .payment-actions {
+        flex-direction: column;
+    }
+    
+    .payment-actions .btn {
+        width: 100%;
+    }
+}
+

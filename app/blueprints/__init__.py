@@ -1,0 +1,2 @@
+# Blueprints de la aplicación
+

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Escuela de Masajes Tailandeses - Certificación Oficial{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Thai Massage School</h1>
+            </div>
+        </nav>
+        
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2 class="hero-title">Certificación Oficial en Masaje Tailandés</h2>
+                <p class="hero-subtitle">100% Certificado por el Gobierno de Bangkok</p>
+                <div class="certification-badge">
+                    <span class="badge-icon">✓</span>
+                    <span>Certificación Oficial Gubernamental</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="about-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Nuestra Escuela</h2>
+            <p class="section-description">
+                Somos una escuela oficial de masajes tailandeses certificada por el gobierno de Bangkok. 
+                Nuestros cursos están reconocidos internacionalmente y te proporcionan las habilidades 
+                necesarias para ejercer profesionalmente.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏛️</div>
+                <h3>Certificación Oficial</h3>
+                <p>100% certificado por el gobierno de Bangkok. Certificado reconocido internacionalmente.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍🏫</div>
+                <h3>Instructores Expertos</h3>
+                <p>Profesores certificados con años de experiencia en masaje tailandés tradicional.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📜</div>
+                <h3>Diploma Reconocido</h3>
+                <p>Obtén un diploma oficial que te permitirá ejercer profesionalmente en todo el mundo.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Método Tradicional</h3>
+                <p>Aprende las técnicas ancestrales del masaje tailandés transmitidas de generación en generación.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="certification-section">
+    <div class="container">
+        <div class="certification-content">
+            <div class="certification-text">
+                <h2>Certificación 100% Oficial del Gobierno de Bangkok</h2>
+                <p>
+                    Nuestra escuela está oficialmente reconocida y certificada por el gobierno de Bangkok. 
+                    Esto garantiza que nuestros cursos cumplen con los más altos estándares de calidad y 
+                    que tu certificado será reconocido internacionalmente.
+                </p>
+                <ul class="certification-list">
+                    <li>✓ Certificación gubernamental oficial</li>
+                    <li>✓ Reconocimiento internacional</li>
+                    <li>✓ Estándares de calidad garantizados</li>
+                    <li>✓ Válido para ejercer profesionalmente</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="registration-section" id="register">
+    <div class="container">
+        <div class="registration-card">
+            <h2>Inscríbete Ahora</h2>
+            <p class="registration-description">
+                Completa el formulario para reservar tu plaza en nuestro curso certificado de masaje tailandés.
+            </p>
+            
+            <form method="POST" action="{{ url_for('main.register') }}" class="registration-form" id="registrationForm">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="name">Nombre Completo *</label>
+                    {{ form.name(class="form-control", placeholder="Ingresa tu nombre completo") }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    {{ form.email(class="form-control", placeholder="tu@email.com") }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Teléfono *</label>
+                    {{ form.phone(class="form-control", placeholder="+34 600 000 000") }}
+                </div>
+                
+                <div class="price-display">
+                    <span class="price-label">Precio del Curso:</span>
+                    <span class="price-amount">{{ "%.2f"|format(course_price) }} €</span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large">
+                    Registrarse y Proceder al Pago
+                </button>
+                
+                <p class="form-note">
+                    * Al registrarte, serás redirigido a la página de pago para completar tu inscripción.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 Thai Massage School. Todos los derechos reservados.</p>
+        <p>Escuela certificada oficialmente por el Gobierno de Bangkok</p>
+    </div>
+</footer>
+{% endblock %}
+
