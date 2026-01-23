@@ -14,3 +14,4 @@ class Payment(db.Model):
     def __repr__(self):
         return f'<Payment {self.id} - {self.status}>'
 
+

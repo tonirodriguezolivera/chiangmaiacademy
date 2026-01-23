@@ -46,3 +46,4 @@ class PaymentService:
         """Obtiene el precio del curso desde la configuración"""
         return current_app.config.get('COURSE_PRICE', 299.00)
 
+

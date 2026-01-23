@@ -58,3 +58,4 @@ def register():
                 flash(error, 'error')
         return redirect(url_for('main.index'))
 
+

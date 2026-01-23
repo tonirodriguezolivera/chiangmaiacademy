@@ -39,3 +39,4 @@ class UserService:
         user = User.query.get(user_id)
         return user and user.is_admin
 
+
