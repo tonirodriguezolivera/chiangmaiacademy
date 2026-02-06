@@ -1,41 +1,46 @@
+# app.py
 from flask import Flask
 from config import Config
-from app.services.database import db
-from app.services.login_manager import login_manager
-from app.models.user import User
+from extensions import db, login_manager
+from models import User
+import os
 
-def create_app():
+def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(Config)
-    
+    app.config.from_object(config_class)
+
+    # Crear carpeta de uploads si no existe
+    import os
+    upload_folder = app.config.get('UPLOAD_FOLDER')
+    if upload_folder and not os.path.exists(upload_folder):
+        os.makedirs(upload_folder, exist_ok=True)
+
     # Inicializar extensiones
     db.init_app(app)
     login_manager.init_app(app)
-    
+
     # Configurar user_loader para Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-    
-    # Registrar blueprints
-    from app.blueprints.main import main_bp
-    from app.blueprints.admin import admin_bp
-    from app.blueprints.payment import payment_bp
-    
+
+    # Registrar Blueprints
+    from blueprints.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from blueprints.admin import bp as admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+    from blueprints.payment import bp as payment_bp
     app.register_blueprint(payment_bp, url_prefix='/payment')
-    
-    # Importar modelos para que se creen las tablas
-    from app.models.payment import Payment
-    
+
     # Crear tablas
     with app.app_context():
         db.create_all()
-    
+
     return app
 
+# Ejecutar directamente (desarrollo local con `flask run`)
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0', port=5000)
-
+    app.run(debug=True)

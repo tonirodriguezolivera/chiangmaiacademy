@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Política de Cancelaciones, Devoluciones y Matrículas - Chiangmai Academy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.legal-content {
+    background: white;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.legal-content h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    border-bottom: 3px solid var(--primary-gold);
+    padding-bottom: 15px;
+}
+
+.legal-content h2 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.legal-content h3 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.legal-content p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+    text-align: justify;
+}
+
+.legal-content ul, .legal-content ol {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.legal-content li {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.legal-content strong {
+    color: var(--text-dark);
+}
+
+.legal-content .highlight-box {
+    background-color: #fff9e6;
+    border-left: 4px solid var(--primary-gold);
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 5px;
+}
+
+.legal-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.legal-content table th,
+.legal-content table td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: left;
+}
+
+.legal-content table th {
+    background-color: var(--bg-light);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    color: var(--primary-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: var(--primary-gold-dark);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-content">
+        <h1>Política de Cancelaciones, Devoluciones y Matrículas</h1>
+        
+        <p><strong>Última actualización:</strong> 6 de febrero de 2025</p>
+        
+        <div class="highlight-box">
+            <p><strong>Importante:</strong> Esta política se rige por la normativa española de protección al consumidor, en particular por el Real Decreto Legislativo 1/2007, de 16 de noviembre, por el que se aprueba el texto refundido de la Ley General para la Defensa de los Consumidores y Usuarios.</p>
+        </div>
+        
+        <h2>1. Derecho de Desistimiento</h2>
+        <p>De conformidad con la legislación española de protección al consumidor, usted tiene derecho a desistir del contrato de compra de un curso durante un plazo de <strong>14 días naturales</strong> desde la fecha de confirmación de la inscripción, sin necesidad de indicar el motivo.</p>
+        
+        <h3>1.1. Plazo de Desistimiento</h3>
+        <p>El plazo de 14 días comenzará a contar:</p>
+        <ul>
+            <li>Desde la fecha de confirmación de la inscripción (fecha de pago completado), si el curso no ha comenzado aún.</li>
+            <li>Si el curso ha comenzado antes de que expire el plazo de desistimiento, el derecho de desistimiento se mantendrá hasta 14 días después de la confirmación, pero se aplicarán las condiciones de cancelación establecidas más adelante.</li>
+        </ul>
+        
+        <h3>1.2. Ejercicio del Derecho de Desistimiento</h3>
+        <p>Para ejercer su derecho de desistimiento, debe informarnos de su decisión mediante una declaración inequívoca enviada a:</p>
+        
+        <p><strong>Email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España</p>
+        
+        <p>Puede utilizar el siguiente formulario modelo, aunque no es obligatorio:</p>
+        
+        <div class="highlight-box">
+            <p><em>"Yo, [nombre del consumidor/usuario], notifico que desisto de mi contrato de compra del siguiente curso: [denominación del curso]. Fecha de la compra: [fecha]. Nombre del consumidor/usuario: [nombre]. Domicilio del consumidor/usuario: [domicilio]. Firma del consumidor/usuario (solo si se presenta en papel): [firma]. Fecha: [fecha]."</em></p>
+        </div>
+        
+        <h3>1.3. Efectos del Desistimiento</h3>
+        <p>Si desiste del contrato, le reembolsaremos todos los pagos recibidos de usted, incluidos los gastos de entrega (con la excepción de los gastos adicionales resultantes de la elección por su parte de una modalidad de entrega distinta a la modalidad estándar menos costosa que ofrezcamos), sin demora indebida y, en todo caso, a más tardar 14 días naturales a partir del día en que recibamos la notificación de su decisión de desistimiento.</p>
+        
+        <h2>2. Cancelaciones por Parte del Usuario</h2>
+        
+        <h3>2.1. Cancelación Antes del Inicio del Curso</h3>
+        <p>Si cancela su inscripción <strong>más de 14 días antes del inicio del curso</strong>:</p>
+        <ul>
+            <li>Se le reembolsará el 100% del importe pagado, menos los gastos de gestión administrativa (10% del importe total, con un mínimo de 20€).</li>
+            <li>El reembolso se realizará en un plazo máximo de 14 días naturales.</li>
+        </ul>
+        
+        <p>Si cancela su inscripción <strong>entre 14 y 7 días antes del inicio del curso</strong>:</p>
+        <ul>
+            <li>Se le reembolsará el 70% del importe pagado.</li>
+            <li>El reembolso se realizará en un plazo máximo de 14 días naturales.</li>
+        </ul>
+        
+        <p>Si cancela su inscripción <strong>menos de 7 días antes del inicio del curso</strong>:</p>
+        <ul>
+            <li>Se le reembolsará el 50% del importe pagado.</li>
+            <li>El reembolso se realizará en un plazo máximo de 14 días naturales.</li>
+        </ul>
+        
+        <h3>2.2. Cancelación Después del Inicio del Curso</h3>
+        <p>Una vez iniciado el curso, las cancelaciones se regirán por las siguientes condiciones:</p>
+        
+        <ul>
+            <li><strong>Durante la primera semana:</strong> Se reembolsará el 30% del importe pagado, siempre que no haya superado el 25% del contenido del curso.</li>
+            <li><strong>Después de la primera semana:</strong> No se realizará reembolso, salvo casos de fuerza mayor debidamente justificados (enfermedad grave, fallecimiento de familiar directo, etc.).</li>
+        </ul>
+        
+        <h3>2.3. Procedimiento de Cancelación</h3>
+        <p>Para cancelar su inscripción, debe:</p>
+        <ol>
+            <li>Enviar una solicitud escrita a recepcion@chiangmaiacademy.es indicando su nombre, número de inscripción y motivo de la cancelación.</li>
+            <li>Recibir confirmación de la cancelación por parte de la Escuela.</li>
+            <li>El reembolso se procesará según los plazos establecidos.</li>
+        </ol>
+        
+        <h2>3. Cancelaciones por Parte de la Escuela</h2>
+        
+        <h3>3.1. Cancelación por Falta de Alumnos</h3>
+        <p>Si la Escuela cancela un curso por no alcanzar el número mínimo de alumnos:</p>
+        <ul>
+            <li>Se le notificará con al menos 7 días de antelación.</li>
+            <li>Se le ofrecerá la posibilidad de inscribirse en otra fecha o curso equivalente.</li>
+            <li>Si no acepta ninguna alternativa, se le reembolsará el 100% del importe pagado en un plazo máximo de 14 días naturales.</li>
+        </ul>
+        
+        <h3>3.2. Cancelación por Fuerza Mayor</h3>
+        <p>En caso de cancelación por causas de fuerza mayor (catástrofes naturales, pandemias, etc.):</p>
+        <ul>
+            <li>Se le notificará tan pronto como sea posible.</li>
+            <li>Se le ofrecerá la posibilidad de reprogramar el curso o recibir un reembolso completo.</li>
+        </ul>
+        
+        <h3>3.3. Cambios en el Programa</h3>
+        <p>Si la Escuela realiza cambios significativos en el programa, fechas o contenido del curso:</p>
+        <ul>
+            <li>Se le notificará con la mayor antelación posible.</li>
+            <li>Tendrá derecho a cancelar su inscripción y recibir un reembolso completo si los cambios no son de su agrado.</li>
+        </ul>
+        
+        <h2>4. Devoluciones</h2>
+        
+        <h3>4.1. Material Didáctico</h3>
+        <p>Si ha recibido material didáctico físico (libros, manuales, etc.) y cancela su inscripción:</p>
+        <ul>
+            <li>Debe devolver el material en perfecto estado dentro de los 14 días siguientes a la cancelación.</li>
+            <li>Los gastos de devolución correrán a su cargo, salvo que el material sea defectuoso o no corresponda con lo solicitado.</li>
+            <li>Una vez recibido y verificado el material, se procederá al reembolso según las condiciones establecidas.</li>
+        </ul>
+        
+        <h3>4.2. Material Digital</h3>
+        <p>El material digital (acceso a plataforma online, videos, etc.) no es reembolsable una vez descargado o accedido, salvo que se cancele dentro del plazo de desistimiento de 14 días.</p>
+        
+        <h2>5. Forma de Reembolso</h2>
+        <p>Los reembolsos se realizarán:</p>
+        <ul>
+            <li>Por el mismo método de pago utilizado en la compra original.</li>
+            <li>En el caso de pagos con tarjeta, el reembolso aparecerá en su extracto en un plazo de 5-10 días hábiles.</li>
+            <li>En el caso de transferencias bancarias, se realizará una transferencia a la cuenta bancaria indicada por el usuario.</li>
+        </ul>
+        
+        <h2>6. Cambios de Fecha o Curso</h2>
+        
+        <h3>6.1. Cambio de Fecha</h3>
+        <p>Si desea cambiar la fecha de su curso:</p>
+        <ul>
+            <li>Debe solicitarlo con al menos 14 días de antelación al inicio del curso original.</li>
+            <li>Se aplicará una tasa de gestión administrativa de 25€, salvo que el cambio sea solicitado por causas justificadas (enfermedad, emergencia familiar, etc.).</li>
+            <li>El cambio está sujeto a disponibilidad de plazas en la nueva fecha.</li>
+        </ul>
+        
+        <h3>6.2. Cambio de Curso</h3>
+        <p>Si desea cambiar a un curso diferente:</p>
+        <ul>
+            <li>Si el nuevo curso tiene un precio superior, deberá abonar la diferencia.</li>
+            <li>Si el nuevo curso tiene un precio inferior, se le reembolsará la diferencia.</li>
+            <li>Se aplicará una tasa de gestión administrativa de 25€.</li>
+        </ul>
+        
+        <h2>7. Matrículas y Reservas</h2>
+        
+        <h3>7.1. Reserva de Plaza</h3>
+        <p>Al realizar el pago del curso, se confirma automáticamente su plaza. La matrícula se considera formalizada una vez recibido el pago completo.</p>
+        
+        <h3>7.2. Plazos de Matrícula</h3>
+        <p>Las matrículas están abiertas hasta completar el aforo del curso. Se recomienda realizar la inscripción con antelación para asegurar la plaza.</p>
+        
+        <h3>7.3. Lista de Espera</h3>
+        <p>Si un curso está completo, puede solicitar ser incluido en la lista de espera. Si se libera una plaza, se le contactará por orden de solicitud.</p>
+        
+        <h2>8. Casos Especiales</h2>
+        
+        <h3>8.1. Enfermedad o Emergencia</h3>
+        <p>En caso de enfermedad grave o emergencia familiar debidamente justificada:</p>
+        <ul>
+            <li>Se evaluará cada caso de forma individual.</li>
+            <li>Se podrá ofrecer la posibilidad de reprogramar el curso sin coste adicional.</li>
+            <li>Se podrá considerar un reembolso parcial o total según las circunstancias.</li>
+        </ul>
+        
+        <h3>8.2. No Asistencia</h3>
+        <p>Si no asiste al curso sin haber cancelado previamente:</p>
+        <ul>
+            <li>No tendrá derecho a reembolso.</li>
+            <li>Se le podrá ofrecer la posibilidad de asistir a una nueva edición del curso con un descuento del 30%, sujeto a disponibilidad.</li>
+        </ul>
+        
+        <h2>9. Reclamaciones</h2>
+        <p>Si no está satisfecho con el servicio recibido o con el proceso de cancelación/reembolso, puede presentar una reclamación:</p>
+        
+        <p><strong>Por email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Por escrito:</strong> C/ Rosselló, 415, 08025 Barcelona, España</p>
+        
+        <p>Nos comprometemos a responder a todas las reclamaciones en un plazo máximo de 15 días hábiles.</p>
+        
+        <p>También puede dirigirse a las oficinas de consumo de su localidad o a la <a href="https://www.consumo.gob.es" target="_blank">Dirección General de Consumo</a>.</p>
+        
+        <h2>10. Modificaciones de esta Política</h2>
+        <p>Nos reservamos el derecho de modificar esta Política de Cancelaciones, Devoluciones y Matrículas. Las modificaciones serán publicadas en esta página con la fecha de "Última actualización" revisada.</p>
+        
+        <h2>11. Contacto</h2>
+        <p>Para cualquier consulta sobre cancelaciones, devoluciones o matrículas, puede contactarnos en:</p>
+        
+        <p><strong>Email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España<br>
+        <strong>Horario de atención:</strong> Martes a Viernes de 08:30h a 21:30h</p>
+        
+        <a href="{{ url_for('main.index') }}" class="back-link">← Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Procesando Pago - {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="payment-process">
+    <div class="container">
+        <div class="payment-info">
+            <h2>Redirigiendo a Redsys...</h2>
+            <p>Serás redirigido automáticamente a la pasarela de pago de Redsys para completar tu compra.</p>
+            
+            <div class="course-summary">
+                <h3>Resumen del pedido</h3>
+                <p><strong>Curso:</strong> {{ course.title }}</p>
+                <p><strong>Precio:</strong> {{ "%.2f"|format(course.price) }} €</p>
+                <p><strong>Cliente:</strong> {{ user.name }}</p>
+            </div>
+            
+            <p class="redirect-note">Si no eres redirigido automáticamente, haz clic en el botón de abajo.</p>
+        </div>
+        
+        <form id="redsys-form" method="POST" action="{{ payment_form.redsys_url }}">
+            <input type="hidden" name="Ds_SignatureVersion" value="{{ payment_form.Ds_SignatureVersion }}">
+            <input type="hidden" name="Ds_MerchantParameters" value="{{ payment_form.Ds_MerchantParameters }}">
+            <input type="hidden" name="Ds_Signature" value="{{ payment_form.Ds_Signature }}">
+            
+            <button type="submit" class="btn btn-primary">Continuar al Pago</button>
+        </form>
+    </div>
+</div>
+
+<style>
+.payment-process {
+    padding: 60px 0;
+    min-height: 60vh;
+}
+
+.payment-info {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.payment-info h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.payment-info p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.course-summary {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.course-summary h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.course-summary p {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.redirect-note {
+    margin-top: 20px;
+    font-style: italic;
+    color: #888;
+}
+
+#redsys-form {
+    text-align: center;
+}
+
+#redsys-form .btn {
+    padding: 15px 40px;
+    font-size: 18px;
+    background: #d4af37;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#redsys-form .btn:hover {
+    background: #b8941f;
+}
+</style>
+
+<script>
+// Redirigir automáticamente después de 2 segundos
+window.onload = function() {
+    setTimeout(function() {
+        document.getElementById('redsys-form').submit();
+    }, 2000);
+};
+</script>
+{% endblock %}
+

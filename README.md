@@ -26,11 +26,23 @@ ADMIN_PASSWORD=admin123
 ```
 
 4. Ejecutar aplicación:
+
+**Desarrollo local:**
 ```bash
+# Opción 1: Ejecutar directamente
 python app.py
+
+# Opción 2: Usar Flask CLI
+flask run
 ```
 
 La aplicación estará disponible en `http://localhost:5000`
+
+**Despliegue en cPanel:**
+- El archivo `app.py` está en la raíz del proyecto
+- La función `create_app()` es el punto de entrada
+- En cPanel, configura el archivo de entrada como `app.py` y la aplicación como `app`
+- Asegúrate de que el archivo `.env` esté configurado con tus variables de entorno
 
 ## Estructura del Proyecto
 
