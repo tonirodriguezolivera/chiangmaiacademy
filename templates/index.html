@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}Chiangmai Academy - Escuela de Masajes Tailandeses{% endblock %}
+
+{% block content %}
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container">
+        <div class="top-bar-content">
+            <a href="tel:+34934581844" class="phone-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                </svg>
+                93 458 18 44
+            </a>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook" class="social-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Instagram" class="social-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Youtube" class="social-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Tripadvisor" class="social-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5c-5.79 0-10.5-4.71-10.5-10.5S6.21 1.5 12 1.5 22.5 6.21 22.5 12 17.79 22.5 12 22.5z"/>
+                        <path d="M12 6c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6zm0 10.5c-2.485 0-4.5-2.015-4.5-4.5S9.515 7.5 12 7.5s4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<header class="main-header">
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M20 8 L20 32 M8 20 L32 20" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <div class="logo-text">
+                    <span class="logo-top">ESCUELA</span>
+                    <span class="logo-bottom">CHIANGMAI ACADEMY</span>
+                </div>
+            </div>
+            <button class="gift-card-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08c-.07.33-.08.66-.08 1 0 1.66 1.34 3 3 3 1.05 0 1.96-.54 2.5-1.35l.5-.67.5.68c.54.81 1.45 1.34 2.5 1.34.74 0 1.42-.27 1.95-.72L20 14z"/>
+                </svg>
+                TARJETAS REGALO
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<!-- Navigation Menu -->
+<nav class="main-nav" id="mainNav">
+    <div class="container">
+        <ul class="nav-menu">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#quienes-somos">Quiénes somos</a></li>
+            <li><a href="#cursos">Cursos</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="{{ url_for('admin.login') }}">Admin</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section" id="inicio">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="container">
+            <h1 class="hero-title">Formación Profesional y Terapias Exclusivas</h1>
+            <a href="#register" class="btn-hero">Ver más</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="testimonials-header">
+            <h2>Qué opinan nuestros alumnos y clientes</h2>
+            <div class="rating-badge">
+                <div class="rating-stars">★★★★★</div>
+                <div class="rating-text">
+                    <strong>EXCELENTE</strong>
+                    <span>A base de <strong>146 reseñas</strong></span>
+                </div>
+            </div>
+            <p class="trustindex-note">Publicado en Trustindex</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    <p>"El masajito Thai de aceites ha sido el mejor autorregalo que me he hecho en mucho tiempo! Salí renovadísima y flotando, muy agradecida 🙏🏼🙏🏼"</p>
+                </div>
+                <div class="testimonial-author">
+                    <strong>Lucia Irene Fernandez Gomez</strong>
+                    <span>Publicado en Trustindex</span>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    <p>"Elegí este centro para hacer un curso de masaje Thai, y creo que no podía haber elegido mejor!! Ricardo no solo nos enseñó los movimientos y técnicas para realizarlo correctamente. También nos transmitió todo su amor por este arte y todo lo que le rodea, inspirándonos a ahondar en temas relacionados, interesantísimos para nuestra salud! Un 10!!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <strong>Ana Pisa</strong>
+                    <span>Publicado en Trustindex</span>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    <p>"Llegué a la escuela a través de la recomendación de una muy buena amiga que, habiendo pasado por otras escuelas, no tuvo duda en recomendar esta y si bien es verdad que tenía alguna idea de lo que era el masaje Thai, pasar por la escuela ha sido todo un cambio de paradigma..."</p>
+                </div>
+                <div class="testimonial-author">
+                    <strong>Georgia Avukatu</strong>
+                    <span>Publicado en Trustindex</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sabiduría Ancestral Section -->
+<section class="wisdom-section" id="quienes-somos">
+    <div class="container">
+        <h2 class="section-title">Sabiduría Ancestral</h2>
+        
+        <div class="wisdom-grid">
+            <div class="wisdom-item">
+                <div class="wisdom-image">
+                    <div class="image-placeholder">Masaje abdominal thai</div>
+                </div>
+                <h3>Cursos con metodología práctica e inmersiva</h3>
+            </div>
+            
+            <div class="wisdom-item">
+                <div class="wisdom-image">
+                    <div class="image-placeholder">Manos y brazos</div>
+                </div>
+                <h3>Profesores con auténtica tradición tailandesa</h3>
+            </div>
+            
+            <div class="wisdom-item">
+                <div class="wisdom-image">
+                    <div class="image-placeholder">Más de 5000 alumnos formados con éxito</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sanación y Bienestar Section -->
+<section class="wellness-section">
+    <div class="container">
+        <h2 class="section-title">Sanación y Bienestar</h2>
+        
+        <div class="wellness-grid">
+            <div class="wellness-item">
+                <div class="wellness-image">
+                    <div class="image-placeholder">Amplia variedad de masajes y terapias manuales</div>
+                </div>
+                <h3>Tratamientos</h3>
+                <p>Déjate cuidar y disfruta de las manos de nuestros terapeutas​</p>
+                <a href="#tratamientos" class="wellness-link">Saber más</a>
+            </div>
+            
+            <div class="wellness-item">
+                <div class="wellness-image">
+                    <div class="image-placeholder">Ambiente acogedor y transformador</div>
+                </div>
+                <h3>Cursos</h3>
+                <p>Aprende las diferentes técnicas de masaje con nuestros cursos profesionales</p>
+                <a href="#formate" class="wellness-link">Saber más</a>
+            </div>
+            
+            <div class="wellness-item">
+                <div class="wellness-image">
+                    <div class="image-placeholder">Técnicas tradicionales tailandesas y ayurvédicas</div>
+                </div>
+                <h3>Blog</h3>
+                <p>Visita nuestro blog ahora y aprende cosas interesantes</p>
+                <a href="#blog" class="wellness-link">Saber más</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section class="courses-section" id="cursos">
+    <div class="container">
+        <h2 class="section-title">Nuestros Cursos</h2>
+        
+        {% if courses %}
+        <div class="courses-grid">
+            {% for course in courses %}
+            <div class="course-card">
+                {% if course.image_filename %}
+                <div class="course-image">
+                    <img src="{{ course.get_image_url() }}" alt="{{ course.title }}">
+                </div>
+                {% endif %}
+                <div class="course-header">
+                    <h3>{{ course.title }}</h3>
+                    <div class="course-price">{{ "%.2f"|format(course.price) }} €</div>
+                </div>
+                {% if course.description %}
+                <p class="course-description">{{ course.description }}</p>
+                {% endif %}
+                <a href="{{ url_for('payment.buy_course', course_id=course.id) }}" class="btn btn-primary">
+                    Comprar Curso
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No hay cursos disponibles en este momento.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contacto">
+    <div class="container">
+        <h2 class="section-title">¿En qué podemos ayudarte?</h2>
+        
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="info-item">
+                    <h3>📍 Direcciones</h3>
+                    <p><strong>C/ Rosselló, 415</strong><br>08025 BARCELONA</p>
+                    <p style="margin-top: 15px;"><strong>Travesera de les Corts 308-310</strong><br>08029 BARCELONA</p>
+                </div>
+                <div class="info-item">
+                    <h3>📞 Contacto</h3>
+                    <p>Teléfono: <a href="tel:+34934581844">93 458 18 44</a><br>Móvil: <a href="tel:+34605641331">605 641 331</a><br>Email: <a href="mailto:recepcion@chiangmaiacademy.es">recepcion@chiangmaiacademy.es</a></p>
+                </div>
+                <div class="info-item">
+                    <h3>🕐 Horario de masajes</h3>
+                    <p>Martes, Miércoles, Jueves y Viernes<br>de 08:30h a 21:30h.</p>
+                </div>
+                <div class="info-item">
+                    <h3>📚 Horario de escuela</h3>
+                    <p>El horario de formaciones varía según los cursos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#quienes-somos">Quiénes somos</a></li>
+                    <li><a href="#formate">Fórmate</a></li>
+                    <li><a href="#tratamientos">Tratamientos</a></li>
+                    <li><a href="#proximos-cursos">Próximos cursos</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('main.aviso_legal') }}">Aviso Legal</a></li>
+                    <li><a href="{{ url_for('main.politica_privacidad') }}">Política de Privacidad</a></li>
+                    <li><a href="{{ url_for('main.politica_cookies') }}">Política de Cookies</a></li>
+                    <li><a href="{{ url_for('main.terminos_condiciones') }}">Términos y Condiciones</a></li>
+                    <li><a href="{{ url_for('main.politica_cancelaciones') }}">Política de Cancelaciones, Devoluciones y Matrículas</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Redes Sociales</h4>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook">Facebook</a>
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="Youtube">Youtube</a>
+                    <a href="#" aria-label="Tripadvisor">Tripadvisor</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025. Todos los derechos reservados</p>
+            <p>Escuela certificada oficialmente por el Gobierno de Bangkok</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Comprar Curso - Chiangmai Academy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-card">
+        <div class="payment-header">
+            <h1>Comprar: {{ course.title }}</h1>
+            <p>Completa tus datos para proceder con la compra</p>
+        </div>
+        
+        <div class="payment-summary">
+            <div class="summary-item total">
+                <span class="summary-label">Precio:</span>
+                <span class="summary-value">{{ "%.2f"|format(course.price) }} €</span>
+            </div>
+        </div>
+        
+        <form method="POST" action="{{ url_for('payment.buy_course', course_id=course.id) }}" class="payment-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label for="name">Nombre Completo *</label>
+                {{ form.name(class="form-control", placeholder="Tu nombre completo") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email *</label>
+                {{ form.email(class="form-control", placeholder="tu@email.com") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Teléfono *</label>
+                {{ form.phone(class="form-control", placeholder="+34 600 000 000") }}
+            </div>
+            
+            <div class="payment-actions">
+                <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-large">Continuar al Pago</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

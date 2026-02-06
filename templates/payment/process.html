@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Procesar Pago - Escuela de Masajes Tailandeses{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-card">
+        <div class="payment-header">
+            <h1>Completar Pago</h1>
+            <p>Finaliza tu inscripción completando el pago del curso</p>
+        </div>
+        
+        <div class="payment-summary">
+            <div class="summary-item">
+                <span class="summary-label">Curso:</span>
+                <span class="summary-value">{{ course.title }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Estudiante:</span>
+                <span class="summary-value">{{ user.name }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Email:</span>
+                <span class="summary-value">{{ user.email }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Teléfono:</span>
+                <span class="summary-value">{{ user.phone }}</span>
+            </div>
+            <div class="summary-item total">
+                <span class="summary-label">Total a Pagar:</span>
+                <span class="summary-value">{{ "%.2f"|format(course.price) }} €</span>
+            </div>
+        </div>
+        
+        <form method="POST" action="{{ url_for('payment.complete_payment', payment_id=payment.id) }}" class="payment-form">
+            <div class="payment-methods">
+                <h3>Método de Pago</h3>
+                <div class="method-options">
+                    <label class="method-option">
+                        <input type="radio" name="payment_method" value="card" checked>
+                        <span>Tarjeta de Crédito/Débito</span>
+                    </label>
+                    <label class="method-option">
+                        <input type="radio" name="payment_method" value="bank_transfer">
+                        <span>Transferencia Bancaria</span>
+                    </label>
+                    <label class="method-option">
+                        <input type="radio" name="payment_method" value="paypal">
+                        <span>PayPal</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="payment-note">
+                <p><strong>Nota:</strong> Este es un sistema de demostración. En producción, aquí se integraría con una pasarela de pagos real (Stripe, PayPal, etc.)</p>
+            </div>
+            
+            <div class="payment-actions">
+                <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-large">Confirmar y Pagar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+

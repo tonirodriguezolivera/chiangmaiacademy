@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Política de Privacidad - Chiangmai Academy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.legal-content {
+    background: white;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.legal-content h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    border-bottom: 3px solid var(--primary-gold);
+    padding-bottom: 15px;
+}
+
+.legal-content h2 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.legal-content h3 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.legal-content p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+    text-align: justify;
+}
+
+.legal-content ul, .legal-content ol {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.legal-content li {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.legal-content strong {
+    color: var(--text-dark);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    color: var(--primary-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: var(--primary-gold-dark);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-content">
+        <h1>Política de Privacidad</h1>
+        
+        <p><strong>Última actualización:</strong> 6 de febrero de 2025</p>
+        
+        <h2>1. Información General</h2>
+        <p>Chiangmai Academy (en adelante, "nosotros", "nuestro" o "la Escuela") se compromete a proteger la privacidad de los usuarios de nuestro sitio web. Esta Política de Privacidad explica cómo recopilamos, utilizamos, divulgamos y protegemos su información personal de conformidad con el Reglamento General de Protección de Datos (RGPD) y la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales.</p>
+        
+        <h2>2. Responsable del Tratamiento</h2>
+        <p><strong>Denominación:</strong> Chiangmai Academy<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Email:</strong> recepcion@chiangmaiacademy.es</p>
+        
+        <h2>3. Datos Personales que Recopilamos</h2>
+        <p>Recopilamos y procesamos los siguientes tipos de datos personales:</p>
+        
+        <h3>3.1. Datos de Identificación</h3>
+        <ul>
+            <li>Nombre completo</li>
+            <li>Dirección de correo electrónico</li>
+            <li>Número de teléfono</li>
+        </ul>
+        
+        <h3>3.2. Datos de Navegación</h3>
+        <ul>
+            <li>Dirección IP</li>
+            <li>Tipo de navegador</li>
+            <li>Páginas visitadas</li>
+            <li>Fecha y hora de acceso</li>
+        </ul>
+        
+        <h3>3.3. Datos de Transacciones</h3>
+        <ul>
+            <li>Información de pagos (procesada por pasarelas de pago seguras)</li>
+            <li>Historial de compras de cursos</li>
+        </ul>
+        
+        <h2>4. Finalidad del Tratamiento</h2>
+        <p>Utilizamos sus datos personales para las siguientes finalidades:</p>
+        
+        <ul>
+            <li><strong>Gestión de inscripciones:</strong> Procesar y gestionar su inscripción en nuestros cursos.</li>
+            <li><strong>Comunicación:</strong> Responder a sus consultas y mantener comunicación relacionada con los servicios solicitados.</li>
+            <li><strong>Facturación:</strong> Emitir facturas y gestionar los pagos de los cursos.</li>
+            <li><strong>Mejora del servicio:</strong> Analizar el uso del sitio web para mejorar nuestros servicios.</li>
+            <li><strong>Cumplimiento legal:</strong> Cumplir con las obligaciones legales aplicables.</li>
+            <li><strong>Marketing (con consentimiento):</strong> Enviar información promocional sobre nuestros cursos y servicios, siempre que haya dado su consentimiento.</li>
+        </ul>
+        
+        <h2>5. Base Jurídica del Tratamiento</h2>
+        <p>El tratamiento de sus datos personales se basa en:</p>
+        
+        <ul>
+            <li><strong>Ejecución de contrato:</strong> Para la gestión de su inscripción y la prestación de los servicios educativos.</li>
+            <li><strong>Consentimiento:</strong> Para el envío de comunicaciones comerciales y el uso de cookies no esenciales.</li>
+            <li><strong>Obligación legal:</strong> Para el cumplimiento de obligaciones fiscales y contables.</li>
+            <li><strong>Interés legítimo:</strong> Para la mejora de nuestros servicios y la seguridad del sitio web.</li>
+        </ul>
+        
+        <h2>6. Conservación de Datos</h2>
+        <p>Conservaremos sus datos personales durante el tiempo necesario para cumplir con las finalidades para las que fueron recopilados, y en cualquier caso:</p>
+        
+        <ul>
+            <li>Datos de clientes: Durante la relación contractual y posteriormente durante los plazos legalmente establecidos (generalmente 6 años para obligaciones fiscales).</li>
+            <li>Datos de marketing: Hasta que retire su consentimiento.</li>
+            <li>Datos de navegación: Según se especifica en nuestra Política de Cookies.</li>
+        </ul>
+        
+        <h2>7. Compartir Datos con Terceros</h2>
+        <p>Sus datos personales pueden ser compartidos con:</p>
+        
+        <ul>
+            <li><strong>Proveedores de servicios:</strong> Empresas que nos ayudan a operar nuestro sitio web y procesar pagos (pasarelas de pago, servicios de hosting).</li>
+            <li><strong>Autoridades públicas:</strong> Cuando sea requerido por ley o por orden judicial.</li>
+        </ul>
+        
+        <p>No vendemos ni alquilamos sus datos personales a terceros para fines comerciales.</p>
+        
+        <h2>8. Transferencias Internacionales</h2>
+        <p>Algunos de nuestros proveedores de servicios pueden estar ubicados fuera del Espacio Económico Europeo. En estos casos, garantizamos que se aplican las medidas de seguridad adecuadas y que se cumplen las garantías establecidas en el RGPD.</p>
+        
+        <h2>9. Sus Derechos</h2>
+        <p>Usted tiene derecho a:</p>
+        
+        <ul>
+            <li><strong>Acceso:</strong> Obtener información sobre sus datos personales que tratamos.</li>
+            <li><strong>Rectificación:</strong> Solicitar la corrección de datos inexactos o incompletos.</li>
+            <li><strong>Supresión:</strong> Solicitar la eliminación de sus datos cuando ya no sean necesarios.</li>
+            <li><strong>Oposición:</strong> Oponerse al tratamiento de sus datos para fines de marketing directo.</li>
+            <li><strong>Limitación:</strong> Solicitar la limitación del tratamiento en determinadas circunstancias.</li>
+            <li><strong>Portabilidad:</strong> Recibir sus datos en un formato estructurado y de uso común.</li>
+            <li><strong>Retirar el consentimiento:</strong> En cualquier momento, cuando el tratamiento se base en su consentimiento.</li>
+        </ul>
+        
+        <p>Para ejercer estos derechos, puede contactarnos en: <strong>recepcion@chiangmaiacademy.es</strong></p>
+        
+        <h2>10. Seguridad de los Datos</h2>
+        <p>Implementamos medidas técnicas y organizativas apropiadas para proteger sus datos personales contra el acceso no autorizado, la alteración, divulgación o destrucción. Estas medidas incluyen:</p>
+        
+        <ul>
+            <li>Cifrado de datos en tránsito (HTTPS)</li>
+            <li>Acceso restringido a datos personales</li>
+            <li>Copias de seguridad regulares</li>
+            <li>Actualizaciones de seguridad periódicas</li>
+        </ul>
+        
+        <h2>11. Menores de Edad</h2>
+        <p>Nuestros servicios están dirigidos a personas mayores de 18 años. No recopilamos intencionalmente datos personales de menores de edad sin el consentimiento de sus padres o tutores legales.</p>
+        
+        <h2>12. Modificaciones de esta Política</h2>
+        <p>Nos reservamos el derecho de modificar esta Política de Privacidad. Las modificaciones serán publicadas en esta página con la fecha de "Última actualización" revisada. Le recomendamos que revise periódicamente esta política.</p>
+        
+        <h2>13. Contacto y Reclamaciones</h2>
+        <p>Para cualquier consulta sobre esta Política de Privacidad o para ejercer sus derechos, puede contactarnos en:</p>
+        
+        <p><strong>Email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España</p>
+        
+        <p>También tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD) si considera que el tratamiento de sus datos personales no se ajusta a la normativa vigente.</p>
+        
+        <p><strong>Agencia Española de Protección de Datos</strong><br>
+        C/ Jorge Juan, 6, 28001 Madrid<br>
+        Teléfono: 912 663 517<br>
+        Web: <a href="https://www.aepd.es" target="_blank">www.aepd.es</a></p>
+        
+        <a href="{{ url_for('main.index') }}" class="back-link">← Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Política de Cookies - Chiangmai Academy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.legal-content {
+    background: white;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.legal-content h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    border-bottom: 3px solid var(--primary-gold);
+    padding-bottom: 15px;
+}
+
+.legal-content h2 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.legal-content h3 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.legal-content p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+    text-align: justify;
+}
+
+.legal-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.legal-content table th,
+.legal-content table td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: left;
+}
+
+.legal-content table th {
+    background-color: var(--bg-light);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.legal-content ul, .legal-content ol {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.legal-content li {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.legal-content strong {
+    color: var(--text-dark);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    color: var(--primary-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: var(--primary-gold-dark);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-content">
+        <h1>Política de Cookies</h1>
+        
+        <p><strong>Última actualización:</strong> 6 de febrero de 2025</p>
+        
+        <h2>1. ¿Qué son las Cookies?</h2>
+        <p>Las cookies son pequeños archivos de texto que se almacenan en su dispositivo (ordenador, tablet, smartphone) cuando visita un sitio web. Las cookies permiten que el sitio web recuerde sus acciones y preferencias durante un período de tiempo, por lo que no tiene que volver a configurarlas cada vez que regrese al sitio o navegue de una página a otra.</p>
+        
+        <h2>2. ¿Cómo Utilizamos las Cookies?</h2>
+        <p>Chiangmai Academy utiliza cookies para mejorar su experiencia de navegación, analizar el tráfico del sitio web y personalizar el contenido. Al utilizar nuestro sitio web, acepta el uso de cookies de acuerdo con esta política.</p>
+        
+        <h2>3. Tipos de Cookies que Utilizamos</h2>
+        
+        <h3>3.1. Cookies Técnicas (Estrictamente Necesarias)</h3>
+        <p>Estas cookies son esenciales para el funcionamiento del sitio web y no se pueden desactivar. Permiten funciones básicas como la navegación por las páginas y el acceso a áreas seguras del sitio web.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Cookie</th>
+                    <th>Propósito</th>
+                    <th>Duración</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>session_id</td>
+                    <td>Mantener la sesión del usuario activa</td>
+                    <td>Sesión</td>
+                </tr>
+                <tr>
+                    <td>csrf_token</td>
+                    <td>Protección contra ataques CSRF</td>
+                    <td>Sesión</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>3.2. Cookies de Análisis</h3>
+        <p>Estas cookies nos ayudan a entender cómo los visitantes interactúan con nuestro sitio web recopilando y reportando información de forma anónima.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Cookie</th>
+                    <th>Propósito</th>
+                    <th>Duración</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>_ga</td>
+                    <td>Google Analytics - Distingue usuarios únicos</td>
+                    <td>2 años</td>
+                </tr>
+                <tr>
+                    <td>_gid</td>
+                    <td>Google Analytics - Distingue usuarios únicos</td>
+                    <td>24 horas</td>
+                </tr>
+                <tr>
+                    <td>_gat</td>
+                    <td>Google Analytics - Limita la tasa de solicitudes</td>
+                    <td>1 minuto</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>3.3. Cookies de Preferencias</h3>
+        <p>Estas cookies permiten que el sitio web recuerde información que cambia la forma en que el sitio se comporta o se ve, como su idioma preferido o la región en la que se encuentra.</p>
+        
+        <h3>3.4. Cookies de Funcionalidad</h3>
+        <p>Estas cookies permiten que el sitio web proporcione funcionalidad y personalización mejoradas. Pueden ser establecidas por nosotros o por proveedores externos cuyos servicios hemos agregado a nuestras páginas.</p>
+        
+        <h2>4. Cookies de Terceros</h2>
+        <p>Algunas cookies son colocadas por servicios de terceros que aparecen en nuestras páginas. Estos incluyen:</p>
+        
+        <ul>
+            <li><strong>Google Analytics:</strong> Para analizar el uso del sitio web y mejorar la experiencia del usuario.</li>
+            <li><strong>Pasarelas de pago:</strong> Para procesar pagos de forma segura (Stripe, PayPal, etc.).</li>
+        </ul>
+        
+        <h2>5. Gestión de Cookies</h2>
+        <p>Puede controlar y/o eliminar las cookies como desee. Puede eliminar todas las cookies que ya están en su ordenador y puede configurar la mayoría de los navegadores para evitar que se coloquen. Sin embargo, si hace esto, es posible que tenga que ajustar manualmente algunas preferencias cada vez que visite un sitio y algunos servicios y funcionalidades pueden no funcionar.</p>
+        
+        <h3>5.1. Configuración por Navegador</h3>
+        <p>Puede gestionar las cookies a través de la configuración de su navegador:</p>
+        
+        <ul>
+            <li><strong>Google Chrome:</strong> Configuración > Privacidad y seguridad > Cookies y otros datos de sitios</li>
+            <li><strong>Mozilla Firefox:</strong> Opciones > Privacidad y seguridad > Cookies y datos del sitio</li>
+            <li><strong>Safari:</strong> Preferencias > Privacidad > Cookies y datos de sitios web</li>
+            <li><strong>Microsoft Edge:</strong> Configuración > Privacidad, búsqueda y servicios > Cookies y permisos de sitio</li>
+        </ul>
+        
+        <h3>5.2. Herramientas de Terceros</h3>
+        <p>También puede gestionar las cookies de análisis a través de:</p>
+        <ul>
+            <li><strong>Google Analytics Opt-out:</strong> <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">https://tools.google.com/dlpage/gaoptout</a></li>
+        </ul>
+        
+        <h2>6. Consentimiento</h2>
+        <p>Al continuar navegando por nuestro sitio web después de ver el aviso de cookies, usted acepta nuestro uso de cookies de acuerdo con esta Política de Cookies.</p>
+        
+        <p>Puede retirar su consentimiento en cualquier momento eliminando las cookies de su navegador o contactándonos a través de los medios indicados más abajo.</p>
+        
+        <h2>7. Actualizaciones de esta Política</h2>
+        <p>Podemos actualizar esta Política de Cookies ocasionalmente para reflejar cambios en las cookies que utilizamos o por otras razones operativas, legales o regulatorias. Le recomendamos que revise esta página periódicamente para estar informado sobre nuestro uso de cookies.</p>
+        
+        <h2>8. Más Información</h2>
+        <p>Para obtener más información sobre las cookies y cómo funcionan, puede visitar:</p>
+        <ul>
+            <li><a href="https://www.allaboutcookies.org" target="_blank">www.allaboutcookies.org</a></li>
+            <li><a href="https://www.youronlinechoices.com" target="_blank">www.youronlinechoices.com</a></li>
+        </ul>
+        
+        <h2>9. Contacto</h2>
+        <p>Si tiene alguna pregunta sobre nuestra Política de Cookies, puede contactarnos en:</p>
+        
+        <p><strong>Email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España</p>
+        
+        <a href="{{ url_for('main.index') }}" class="back-link">← Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}
+

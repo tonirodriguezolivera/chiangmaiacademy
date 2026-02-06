@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Configuración de Pasarela de Pago{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Configuración de Pasarela de Pago</h1>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Dashboard</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+    
+    <div class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('admin.courses_list') }}" class="nav-link">Cursos</a>
+        <a href="{{ url_for('admin.buyers_list') }}" class="nav-link">Compradores</a>
+        <a href="{{ url_for('admin.payment_gateway') }}" class="nav-link active">Pasarela de Pago</a>
+    </div>
+    
+    <div class="admin-form-container">
+        <div class="info-box">
+            <p><strong>Nota:</strong> Configura aquí las credenciales de Redsys para procesar los pagos de los cursos. Puedes obtener estas credenciales desde tu panel de administración de Redsys.</p>
+            <p><strong>Importante:</strong> En modo test, usa las credenciales de prueba proporcionadas por Redsys. Para producción, usa las credenciales reales.</p>
+        </div>
+        
+        <form method="POST" class="admin-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label for="gateway_name">Pasarela de Pago *</label>
+                {{ form.gateway_name(class="form-control", readonly=true) }}
+                <small>Redsys (configurado automáticamente)</small>
+                {% if form.gateway_name.errors %}
+                    <div class="form-errors">
+                        {% for error in form.gateway_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="merchant_code">Código de Comercio (Merchant Code) *</label>
+                {{ form.merchant_code(class="form-control") }}
+                <small>Código de comercio proporcionado por Redsys (máximo 9 caracteres)</small>
+                {% if form.merchant_code.errors %}
+                    <div class="form-errors">
+                        {% for error in form.merchant_code.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="terminal">Terminal *</label>
+                {{ form.terminal(class="form-control") }}
+                <small>Número de terminal (normalmente 001, máximo 3 caracteres)</small>
+                {% if form.terminal.errors %}
+                    <div class="form-errors">
+                        {% for error in form.terminal.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="secret_key">Clave Secreta (Secret Key) *</label>
+                {{ form.secret_key(class="form-control", type="password") }}
+                <small>Clave secreta proporcionada por Redsys para firmar las transacciones (nunca la compartas)</small>
+                {% if form.secret_key.errors %}
+                    <div class="form-errors">
+                        {% for error in form.secret_key.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="environment">Entorno *</label>
+                {{ form.environment(class="form-control") }}
+                <small>Selecciona "test" para pruebas o "production" para producción</small>
+                {% if form.environment.errors %}
+                    <div class="form-errors">
+                        {% for error in form.environment.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+        
+        {% if config %}
+        <div class="info-box" style="margin-top: 30px;">
+            <h3>Configuración Actual</h3>
+            <p><strong>Pasarela:</strong> {{ config.gateway_name|upper }}</p>
+            <p><strong>Código de Comercio:</strong> {{ config.merchant_code if config.merchant_code else 'No configurado' }}</p>
+            <p><strong>Terminal:</strong> {{ config.terminal if config.terminal else 'No configurado' }}</p>
+            <p><strong>Clave Secreta:</strong> {{ 'Configurada' if config.secret_key else 'No configurada' }}</p>
+            <p><strong>Entorno:</strong> {{ config.environment|upper if config.environment else 'No configurado' }}</p>
+            <p><strong>Última actualización:</strong> {{ config.updated_at.strftime('%d/%m/%Y %H:%M') if config.updated_at else 'N/A' }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

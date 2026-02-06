@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Cursos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Gestión de Cursos</h1>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Dashboard</a>
+            <a href="{{ url_for('admin.course_new') }}" class="btn btn-primary">Nuevo Curso</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+    
+    <div class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('admin.courses_list') }}" class="nav-link active">Cursos</a>
+        <a href="{{ url_for('admin.buyers_list') }}" class="nav-link">Compradores</a>
+        <a href="{{ url_for('admin.payment_gateway') }}" class="nav-link">Pasarela de Pago</a>
+    </div>
+    
+    {% if courses %}
+    <div class="table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Fecha Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.id }}</td>
+                    <td><strong>{{ course.title }}</strong></td>
+                    <td>{{ course.description[:100] if course.description else 'Sin descripción' }}...</td>
+                    <td>{{ "%.2f"|format(course.price) }} €</td>
+                    <td>
+                        {% if course.is_active %}
+                            <span class="badge badge-success">Activo</span>
+                        {% else %}
+                            <span class="badge badge-warning">Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ course.created_at.strftime('%d/%m/%Y') }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.course_edit', course_id=course.id) }}" class="btn btn-small">Editar</a>
+                        {% if course.is_active %}
+                        <form method="POST" action="{{ url_for('admin.course_delete', course_id=course.id) }}" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este curso?');">
+                            <button type="submit" class="btn btn-small btn-danger">Eliminar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay cursos. <a href="{{ url_for('admin.course_new') }}">Crear primer curso</a></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

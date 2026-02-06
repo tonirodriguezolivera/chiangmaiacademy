@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Aviso Legal - Chiangmai Academy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.legal-content {
+    background: white;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.legal-content h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    border-bottom: 3px solid var(--primary-gold);
+    padding-bottom: 15px;
+}
+
+.legal-content h2 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.legal-content h3 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.legal-content p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+    text-align: justify;
+}
+
+.legal-content ul, .legal-content ol {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.legal-content li {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.legal-content strong {
+    color: var(--text-dark);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    color: var(--primary-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: var(--primary-gold-dark);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-content">
+        <h1>Aviso Legal</h1>
+        
+        <p><strong>Última actualización:</strong> 6 de febrero de 2025</p>
+        
+        <h2>1. Datos Identificativos</h2>
+        <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico, se informa a los usuarios de los datos identificativos de la entidad:</p>
+        
+        <p><strong>Denominación social:</strong> Chiangmai Academy<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Email:</strong> recepcion@chiangmaiacademy.es</p>
+        
+        <h2>2. Objeto y Condiciones Generales de Uso</h2>
+        <p>El presente Aviso Legal regula el uso del sitio web <strong>chiangmaiacademy.es</strong> (en adelante, el "Sitio Web"), del que es titular Chiangmai Academy (en adelante, el "Titular").</p>
+        
+        <p>La navegación por el Sitio Web atribuye la condición de usuario del mismo e implica la aceptación plena y sin reservas de todas y cada una de las disposiciones incluidas en este Aviso Legal, que pueden sufrir modificaciones.</p>
+        
+        <p>El Sitio Web proporciona acceso a información, servicios y contenidos (en adelante, los "Contenidos") pertenecientes al Titular o a sus licenciantes a los que el Usuario puede tener acceso.</p>
+        
+        <h2>3. Usuario y Responsabilidades</h2>
+        <p>El acceso, navegación y uso del Sitio Web, confiere la condición de Usuario, por lo que se aceptan, desde que se inicia la navegación por el Sitio Web, todas las condiciones aquí establecidas, así como sus ulteriores modificaciones, sin perjuicio de la aplicación de la correspondiente normativa legal de obligado cumplimiento según el caso.</p>
+        
+        <p>El Usuario se compromete a hacer un uso adecuado de los Contenidos y Servicios que el Titular ofrece a través de su Sitio Web y con carácter enunciativo pero no limitativo, a no emplearlos para:</p>
+        
+        <ul>
+            <li>Incurrir en actividades ilícitas, ilegales o contrarias a la buena fe y al orden público.</li>
+            <li>Difundir contenidos o propaganda de carácter racista, xenófobo, pornográfico-ilegal, de apología del terrorismo o atentatorio contra los derechos humanos.</li>
+            <li>Provocar daños en los sistemas físicos y lógicos del Titular, de sus proveedores o de terceras personas, introducir o difundir en la red virus informáticos o cualesquiera otros sistemas físicos o lógicos que sean susceptibles de provocar daños.</li>
+            <li>Intentar acceder y, en su caso, utilizar las cuentas de correo electrónico de otros usuarios y modificar o manipular sus mensajes.</li>
+        </ul>
+        
+        <h2>4. Propiedad Intelectual e Industrial</h2>
+        <p>El Titular, por sí o como cesionario, es titular de todos los derechos de propiedad intelectual e industrial de su Sitio Web, así como de los elementos contenidos en el mismo (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.).</p>
+        
+        <p>Quedan expresamente prohibidas la reproducción, la distribución y la comunicación pública, incluida su modalidad de puesta a disposición, de la totalidad o parte de los contenidos de esta página web, con fines comerciales, en cualquier soporte y por cualquier medio técnico, sin la autorización del Titular.</p>
+        
+        <h2>5. Exclusión de Garantías y Responsabilidad</h2>
+        <p>El Titular no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: errores u omisiones en los contenidos, falta de disponibilidad del portal o la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.</p>
+        
+        <h2>6. Modificaciones</h2>
+        <p>El Titular se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su Sitio Web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su Sitio Web.</p>
+        
+        <h2>7. Enlaces</h2>
+        <p>En el caso de que en el Sitio Web se dispusiesen enlaces o hipervínculos hacía otros sitios de Internet, el Titular no ejercerá ningún tipo de control sobre dichos sitios y contenidos. En ningún caso el Titular asumirá responsabilidad alguna por los contenidos de algún enlace perteneciente a un sitio web ajeno, ni garantizará la disponibilidad técnica, calidad, fiabilidad, exactitud, amplitud, veracidad, validez y constitucionalidad de cualquier material o información contenida en ninguno de dichos hipervínculos u otros sitios de Internet.</p>
+        
+        <h2>8. Derecho de Exclusión</h2>
+        <p>El Titular se reserva el derecho a denegar o retirar el acceso al Sitio Web y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las Condiciones Generales de Uso.</p>
+        
+        <h2>9. Legislación Aplicable y Jurisdicción</h2>
+        <p>Para la resolución de todas las controversias o cuestiones relacionadas con el presente Sitio Web o de las actividades en él desarrolladas, será de aplicación la legislación española, a la que se someten expresamente las partes, siendo competentes para la resolución de todos los conflictos derivados o relacionados con su uso los Juzgados y Tribunales de Barcelona.</p>
+        
+        <h2>10. Contacto</h2>
+        <p>Para cualquier consulta sobre el presente Aviso Legal, puede contactar con nosotros a través de:</p>
+        <p><strong>Email:</strong> recepcion@chiangmaiacademy.es<br>
+        <strong>Teléfono:</strong> 93 458 18 44<br>
+        <strong>Dirección:</strong> C/ Rosselló, 415, 08025 Barcelona, España</p>
+        
+        <a href="{{ url_for('main.index') }}" class="back-link">← Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}
+
