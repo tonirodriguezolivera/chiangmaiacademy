@@ -5,20 +5,11 @@ from models import User, Payment
 class UserService:
     @staticmethod
     def create_user(name, email, phone):
-        """Crea un nuevo usuario o retorna el existente si el email ya está registrado"""
-        # Buscar si ya existe un usuario con ese email
-        existing_user = User.query.filter_by(email=email).first()
-        
-        if existing_user:
-            # Actualizar datos si han cambiado
-            if existing_user.name != name:
-                existing_user.name = name
-            if existing_user.phone != phone:
-                existing_user.phone = phone
-            db.session.commit()
-            return existing_user
-        
-        # Crear nuevo usuario
+        """
+        Crea SIEMPRE un nuevo registro de usuario, aunque el email se repita.
+        Necesario para que cada compra preserve los datos exactos que introdujo
+        el comprador en ese pedido.
+        """
         user = User(name=name, email=email, phone=phone)
         db.session.add(user)
         db.session.commit()
@@ -26,29 +17,28 @@ class UserService:
     
     @staticmethod
     def get_user_by_email(email):
-        """Obtiene un usuario por email"""
+        """Obtiene un usuario por su direccion de correo electronico"""
         return User.query.filter_by(email=email).first()
     
     @staticmethod
     def get_user_by_id(user_id):
-        """Obtiene un usuario por ID"""
+        """Obtiene un usuario por su ID unico"""
         return User.query.get(user_id)
     
     @staticmethod
     def get_all_users():
-        """Obtiene todos los usuarios"""
+        """Obtiene la lista de todos los usuarios registrados"""
         return User.query.order_by(User.created_at.desc()).all()
     
     @staticmethod
     def get_users_with_payments():
-        """Obtiene usuarios que han completado el pago"""
+        """Obtiene los usuarios que tienen al menos un pago con estado 'completed'"""
         return User.query.join(Payment).filter(
             Payment.status == 'completed'
         ).distinct().order_by(User.created_at.desc()).all()
     
     @staticmethod
     def is_admin(user_id):
-        """Verifica si un usuario es administrador"""
+        """Verifica si un usuario tiene permisos de administrador"""
         user = User.query.get(user_id)
         return user and user.is_admin
-

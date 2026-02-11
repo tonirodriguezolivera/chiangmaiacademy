@@ -50,3 +50,5 @@ if __name__ == '__main__':
     print("🔄 Actualizando base de datos para añadir campo public_base_url...\n")
     update_payment_gateway_table()
 
+
+

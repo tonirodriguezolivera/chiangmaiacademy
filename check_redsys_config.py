@@ -102,3 +102,5 @@ if __name__ == '__main__':
     print("🔍 Verificando configuración de RedSys...\n")
     check_redsys_config()
 
+
+
