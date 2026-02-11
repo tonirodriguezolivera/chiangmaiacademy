@@ -1,257 +1,194 @@
 # services/redsys_service.py
 import base64
+import binascii
 import hashlib
 import hmac
+import json
+import time
 from datetime import datetime
 from flask import url_for, request
 from Crypto.Cipher import DES3
-from Crypto.Util.Padding import pad
 from services.payment_gateway_service import PaymentGatewayService
 from services.payment_service import PaymentService
 from models import Payment
 
 class RedsysService:
-    """Servicio para integrar pagos con Redsys"""
+    """Servicio para integrar pagos con Redsys corregido para evitar SIS0051"""
     
     @staticmethod
     def get_config():
-        """Obtiene la configuración de Redsys"""
+        """Obtiene la configuración activa de Redsys"""
         config = PaymentGatewayService.get_config()
         if not config or config.gateway_name != 'redsys':
             return None
         return config
-    
-    
+
     @staticmethod
-    def generate_merchant_parameters(payment_id, amount, order_id, description, merchant_code, terminal, currency='978'):
-        """
-        Genera los parámetros del comercio para Redsys
-        currency: 978 = EUR, 840 = USD, etc.
-        """
-        from flask import current_app
-        
-        # Validar amount
+    def generate_merchant_parameters(payment_id, amount, order_id, description, merchant_code, terminal, currency='978', public_base_url=None):
+        """Genera el diccionario de parámetros del comercio"""
         if not amount or amount <= 0:
             raise ValueError("El monto debe ser mayor a 0")
         
-        # Obtener URL base para las URLs de retorno
-        base_url = request.url_root.rstrip('/')
+        if public_base_url:
+            base_url = public_base_url.rstrip('/')
+        else:
+            base_url = request.url_root.rstrip('/')
         
-        # Parámetros del comercio (todos los campos requeridos)
-        # IMPORTANTE: Los nombres deben ser en mayúsculas según documentación Redsys
+        notification_url = f'{base_url}/payment/redsys/notification'
+        url_ok = f'{base_url}/payment/redsys/ok'
+        url_ko = f'{base_url}/payment/redsys/ko'
+        
         merchant_params = {
-            'DS_MERCHANT_AMOUNT': str(int(round(amount * 100))),  # Monto en céntimos
-            'DS_MERCHANT_ORDER': str(order_id).zfill(12),  # Número de pedido (12 dígitos)
-            'DS_MERCHANT_MERCHANTCODE': str(merchant_code),  # Código de comercio
+            'DS_MERCHANT_AMOUNT': str(int(round(amount * 100))),
+            'DS_MERCHANT_ORDER': str(order_id),
+            'DS_MERCHANT_MERCHANTCODE': str(merchant_code),
             'DS_MERCHANT_CURRENCY': str(currency),
-            'DS_MERCHANT_TRANSACTIONTYPE': '0',  # 0 = Autorización
-            'DS_MERCHANT_TERMINAL': str(terminal).zfill(3),  # Terminal (3 dígitos)
-            'DS_MERCHANT_MERCHANTURL': f'{base_url}/payment/redsys/notification',
-            'DS_MERCHANT_URLOK': f'{base_url}/payment/redsys/ok',
-            'DS_MERCHANT_URLKO': f'{base_url}/payment/redsys/ko',
-            'DS_MERCHANT_PRODUCTDESCRIPTION': description[:125] if description else 'Curso',  # Máximo 125 caracteres
+            'DS_MERCHANT_TRANSACTIONTYPE': '0',
+            'DS_MERCHANT_TERMINAL': str(terminal).zfill(3),
+            'DS_MERCHANT_MERCHANTURL': notification_url,
+            'DS_MERCHANT_URLOK': url_ok,
+            'DS_MERCHANT_URLKO': url_ko,
+            'DS_MERCHANT_PRODUCTDESCRIPTION': (description[:125] if description else 'Curso'),
             'DS_MERCHANT_MERCHANTNAME': 'Chiangmai Academy'
         }
         
         return merchant_params
-    
+
     @staticmethod
     def encode_merchant_parameters(params):
-        """Codifica los parámetros del comercio en Base64 normal (según documentación Redsys)"""
-        import json
-        # Eliminar campos vacíos y asegurar que todos los valores sean strings
+        """Codifica los parámetros en Base64 con claves ordenadas"""
         clean_params = {k: str(v) for k, v in params.items() if v is not None and v != ''}
-        # JSON sin espacios y sin ensure_ascii para mantener caracteres especiales
-        json_str = json.dumps(clean_params, separators=(',', ':'), ensure_ascii=False)
-        # Base64 NORMAL (con +, / y =) - NO Base64URL
-        encoded = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
-        return encoded
-    
+        # sort_keys=True es vital para que la firma no falle nunca
+        json_str = json.dumps(clean_params, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
+        return base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
+
     @staticmethod
     def decode_merchant_parameters(encoded_params):
-        """Decodifica los parámetros del comercio desde Base64 normal"""
-        import json
+        """Decodifica los parámetros desde Base64"""
         decoded = base64.b64decode(encoded_params.encode('utf-8')).decode('utf-8')
         return json.loads(decoded)
-    
-    @staticmethod
-    def _zero_pad_8(data):
-        """Redsys: padding con 0x00 hasta múltiplo de 8"""
-        pad_len = (8 - (len(data) % 8)) % 8
-        return data + (b'\x00' * pad_len)
-    
+
     @staticmethod
     def _derive_hmac_key(secret_key_b64, order_id):
-        """
-        Deriva la clave HMAC usando 3DES según especificación Redsys HMAC_SHA512_V2
-        Usa zero padding (no ISO7816) como requiere Redsys
-        """
-        # Clave del comercio viene en Base64
-        key = base64.b64decode(secret_key_b64)
-        # Ajustar paridad de la clave (importante para 3DES)
-        key = base64.b64decode(secret_key_b64)
-        
-        # order_id en bytes y padding con zero padding
-        order_bytes = order_id.encode('utf-8')
-        order_padded = RedsysService._zero_pad_8(order_bytes)
-        
-        # 3DES CBC con IV=0
-        iv = b'\x00' * 8
-        cipher = DES3.new(key, DES3.MODE_CBC, iv=iv)
-        derived_key = cipher.encrypt(order_padded)
-        
-        return derived_key
-    
+        """Deriva la clave HMAC usando 3DES"""
+        try:
+            secret_key_b64 = secret_key_b64.strip()
+            key = base64.b64decode(secret_key_b64)
+            key = DES3.adjust_key_parity(key)
+            
+            order_bytes = order_id.encode('utf-8')
+            pad_len = (8 - (len(order_bytes) % 8)) % 8
+            order_padded = order_bytes + (b'\x00' * pad_len)
+            
+            iv = b'\x00' * 8
+            cipher = DES3.new(key, DES3.MODE_CBC, iv=iv)
+            return cipher.encrypt(order_padded)
+        except Exception as e:
+            print(f"ERROR en _derive_hmac_key: {e}")
+            raise
+
     @staticmethod
     def generate_signature(merchant_params_encoded, order_id, secret_key):
-        """
-        Genera la firma para Redsys usando HMAC_SHA512_V2 (según documentación oficial)
-        Proceso: 3DES(order_id, secret_key) -> HMAC_SHA512(derived_key, merchant_params)
-        """
-        # Derivar clave usando 3DES
-        derived_key = RedsysService._derive_hmac_key(secret_key, order_id)
-        
-        # Calcular HMAC SHA512 con la clave derivada
-        mac = hmac.new(
-            derived_key,
-            merchant_params_encoded.encode('utf-8'),
-            hashlib.sha512
-        ).digest()
-        
-        # Codificar en Base64 NORMAL (con +, / y =)
-        signature_encoded = base64.b64encode(mac).decode('utf-8')
-        
-        return signature_encoded
-    
+        """Genera la firma HMAC_SHA256"""
+        try:
+            derived_key = RedsysService._derive_hmac_key(secret_key, order_id)
+            mac = hmac.new(
+                derived_key,
+                merchant_params_encoded.encode('utf-8'),
+                hashlib.sha256
+            ).digest()
+            return base64.b64encode(mac).decode('utf-8')
+        except Exception as e:
+            print(f"ERROR en generate_signature: {e}")
+            raise
+
     @staticmethod
     def verify_signature(merchant_params_encoded, order_id, received_signature, secret_key):
-        """Verifica la firma recibida de Redsys usando HMAC_SHA512_V2"""
+        """Verifica la firma de Redsys"""
         expected = RedsysService.generate_signature(merchant_params_encoded, order_id, secret_key)
-        # Comparación segura para evitar timing attacks
         return hmac.compare_digest(expected, received_signature)
-    
+
     @staticmethod
     def create_payment_form(payment_id, course_title, amount):
-        """
-        Crea el formulario de pago para Redsys
-        Retorna un diccionario con los datos del formulario
-        """
+        """Crea el formulario de pago con OrderID único para evitar SIS0051"""
         config = RedsysService.get_config()
-        if not config:
-            print("ERROR: No se encontró configuración de Redsys")
+        if not config or not config.merchant_code or not config.secret_key:
             return None
-        
-        # Debug: verificar qué se está leyendo
-        print(f"CONFIG REDSYS - ID: {config.id}, MerchantCode: {config.merchant_code}, Terminal: {config.terminal}, SecretKey: {'Configurada' if config.secret_key else 'VACÍA'}")
-        
-        # Validar configuración
-        if not config.merchant_code or not config.terminal:
-            print(f"ERROR: Configuración incompleta - MerchantCode: {config.merchant_code}, Terminal: {config.terminal}")
-            return None
-        
-        # Validar amount
-        if not amount or amount <= 0:
-            return None
-        
-        # Generar número de pedido único (12 dígitos)
-        order_id = str(payment_id).zfill(12)
-        
-        # Generar parámetros del comercio (con merchant_code y terminal incluidos)
+
+        # --- SOLUCIÓN PARA SIS0051 (Número repetido en entorno compartido) ---
+        # Si estamos en test, creamos un número de pedido basado en el tiempo
+        # para no chocar con otros desarrolladores que usen el código 999008881.
+        # Formato: [Día][Hora][Minuto][ID_Pago] limitado a 12 caracteres.
+        if config.environment == 'test':
+            prefix = datetime.now().strftime('%d%H%M') # Ejemplo: 111430 (Día 11, 14:30h)
+            # Concatenamos y cogemos los últimos 12 caracteres para cumplir la norma de Redsys
+            order_id = (prefix + str(payment_id))[-12:].zfill(12)
+        else:
+            # En producción usamos el ID normal con ceros a la izquierda
+            order_id = str(payment_id).zfill(12)
+
         merchant_params = RedsysService.generate_merchant_parameters(
             payment_id=payment_id,
             amount=amount,
             order_id=order_id,
-            description=course_title or 'Curso',
+            description=course_title,
             merchant_code=config.merchant_code,
             terminal=config.terminal,
-            currency='978'  # EUR
+            public_base_url=config.public_base_url
         )
-        
-        # Codificar parámetros
+
         merchant_params_encoded = RedsysService.encode_merchant_parameters(merchant_params)
-        
-        # Generar firma
-        signature = RedsysService.generate_signature(
-            merchant_params_encoded,
-            order_id,
-            config.secret_key
-        )
-        
-        # Obtener URL de Redsys
-        redsys_url = config.get_redsys_url()
-        
+        signature = RedsysService.generate_signature(merchant_params_encoded, order_id, config.secret_key)
+
+        print(f"\n>>> DEBUG SIS0051: Enviando OrderID '{order_id}' para el Pago ID {payment_id}")
+
         return {
-            'redsys_url': redsys_url,
-            'Ds_SignatureVersion': 'HMAC_SHA512_V2',
+            'redsys_url': config.get_redsys_url(),
+            'Ds_SignatureVersion': 'HMAC_SHA256_V1',
             'Ds_MerchantParameters': merchant_params_encoded,
             'Ds_Signature': signature
         }
-    
+
     @staticmethod
     def process_notification(merchant_params_encoded, signature):
-        """
-        Procesa la notificación recibida de Redsys
-        Retorna un diccionario con el resultado
-        """
+        """Procesa la notificación y recupera el ID original del pago"""
         config = RedsysService.get_config()
-        if not config:
-            return {'error': 'Configuración de Redsys no encontrada'}
-        
+        if not config: return {'error': 'Configuración no encontrada'}
+
         try:
-            # Decodificar parámetros
             params = RedsysService.decode_merchant_parameters(merchant_params_encoded)
+            order_id = params.get('Ds_Order') or params.get('DS_MERCHANT_ORDER')
             
-            # Extraer datos importantes
-            order_id = params.get('Ds_Order', '')
-            response_code = params.get('Ds_Response', '')
-            amount = params.get('Ds_Amount', '0')
-            
-            # Verificar firma
-            if not RedsysService.verify_signature(
-                merchant_params_encoded,
-                order_id,
-                signature,
-                config.secret_key
-            ):
+            if not RedsysService.verify_signature(merchant_params_encoded, order_id, signature, config.secret_key):
                 return {'error': 'Firma inválida'}
+
+            response_code = params.get('Ds_Response', '999')
+            response_code_int = int(response_code)
+
+            # Intentamos buscar el pago. Primero por el OrderID completo
+            # Si falla, es que usamos el prefijo de TEST, así que lo buscamos por ID de base de datos
+            # En Test, el ID real suele estar al final del OrderID.
             
-            # Convertir código de respuesta
-            # 0-99 = Transacción autorizada
-            # 100+ = Error
-            response_code_int = int(response_code) if response_code.isdigit() else 999
+            # 1. Intentar buscar pago directamente (caso producción)
+            payment_id_raw = int(order_id.lstrip('0'))
+            payment = PaymentService.get_payment_by_id(payment_id_raw)
             
-            # Obtener payment_id del order_id (eliminar ceros a la izquierda)
-            payment_id = int(order_id.lstrip('0')) if order_id.lstrip('0') else 0
+            # 2. Si no existe, es que es un ID con prefijo de TEST
+            if not payment and config.environment == 'test':
+                # Buscamos el pago que coincida con este OrderID en el campo transaction_id o similar
+                # O simplemente intentamos extraer los últimos dígitos del pedido
+                # Para simplificar, recorremos los últimos dígitos:
+                for i in range(1, 7): # Probamos los últimos 1 a 6 dígitos
+                    try:
+                        potential_id = int(order_id[-i:])
+                        payment = PaymentService.get_payment_by_id(potential_id)
+                        if payment: break
+                    except: continue
+
+            if response_code_int < 100 and payment:
+                PaymentService.complete_payment(payment.id, transaction_id=order_id, payment_method='redsys')
+                return {'success': True, 'payment_id': payment.id}
             
-            if response_code_int < 100:
-                # Pago autorizado
-                payment = PaymentService.get_payment_by_id(payment_id)
-                if payment and payment.status != 'completed':
-                    PaymentService.complete_payment(
-                        payment_id,
-                        transaction_id=order_id,
-                        payment_method='redsys'
-                    )
-                    return {
-                        'success': True,
-                        'payment_id': payment_id,
-                        'order_id': order_id,
-                        'amount': float(amount) / 100
-                    }
-                return {'error': 'Pago ya procesado o no encontrado'}
-            else:
-                # Error en el pago
-                payment = PaymentService.get_payment_by_id(payment_id)
-                if payment:
-                    payment.status = 'failed'
-                    from extensions import db
-                    db.session.commit()
-                return {
-                    'success': False,
-                    'error': f'Error en el pago. Código: {response_code}',
-                    'payment_id': payment_id
-                }
-                
+            return {'success': False, 'error': f'Pago denegado o pedido no encontrado', 'payment_id': order_id}
         except Exception as e:
             return {'error': f'Error procesando notificación: {str(e)}'}
-

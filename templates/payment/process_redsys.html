@@ -19,13 +19,28 @@
             <p class="redirect-note">Si no eres redirigido automáticamente, haz clic en el botón de abajo.</p>
         </div>
         
-        <form id="redsys-form" method="POST" action="{{ payment_form.redsys_url }}">
+        <form id="redsys-form" method="POST" action="{{ payment_form.redsys_url }}" accept-charset="UTF-8">
             <input type="hidden" name="Ds_SignatureVersion" value="{{ payment_form.Ds_SignatureVersion }}">
             <input type="hidden" name="Ds_MerchantParameters" value="{{ payment_form.Ds_MerchantParameters }}">
             <input type="hidden" name="Ds_Signature" value="{{ payment_form.Ds_Signature }}">
             
             <button type="submit" class="btn btn-primary">Continuar al Pago</button>
         </form>
+        
+        <!-- Debug: Mostrar datos que se envían (solo en desarrollo) -->
+        {% if config and config.environment == 'test' %}
+        <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px; font-size: 12px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <strong>🔍 Debug (Solo Test):</strong><br>
+            <strong>URL:</strong> {{ payment_form.redsys_url }}<br>
+            <strong>SignatureVersion:</strong> {{ payment_form.Ds_SignatureVersion }}<br>
+            <strong>MerchantParameters (completo):</strong> <code style="word-break: break-all; display: block; margin-top: 5px;">{{ payment_form.Ds_MerchantParameters }}</code><br>
+            <strong>Signature (completo):</strong> <code style="word-break: break-all; display: block; margin-top: 5px;">{{ payment_form.Ds_Signature }}</code><br>
+            <details style="margin-top: 10px;">
+                <summary style="cursor: pointer; font-weight: bold;">Ver parámetros decodificados</summary>
+                <pre style="background: #f8f9fa; padding: 10px; margin-top: 5px; border-radius: 3px; overflow-x: auto; font-size: 11px;">{{ payment_form|tojson(indent=2) }}</pre>
+            </details>
+        </div>
+        {% endif %}
     </div>
 </div>
 

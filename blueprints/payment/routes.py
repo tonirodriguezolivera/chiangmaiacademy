@@ -101,7 +101,8 @@ def process_payment(payment_id):
                          payment=payment, 
                          user=user,
                          course=course,
-                         payment_form=payment_form_data)
+                         payment_form=payment_form_data,
+                         config=redsys_config)
 
 # ========== RUTAS DE REDSYS ==========
 

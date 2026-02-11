@@ -14,7 +14,7 @@ class PaymentGatewayService:
         return config
     
     @staticmethod
-    def update_config(gateway_name, merchant_code=None, terminal=None, secret_key=None, environment=None):
+    def update_config(gateway_name, merchant_code=None, terminal=None, secret_key=None, environment=None, public_base_url=None):
         """Actualiza o crea la configuración de la pasarela de pago (Redsys)"""
         # Desactivar todas las configuraciones existentes para asegurar solo una activa
         PaymentGatewayConfig.query.update({PaymentGatewayConfig.is_active: False})
@@ -35,9 +35,12 @@ class PaymentGatewayService:
         if terminal is not None:
             config.terminal = terminal
         if secret_key is not None:
-            config.secret_key = secret_key
+            # 🔧 Limpiar la clave secreta (strip) para eliminar espacios/retornos de línea
+            config.secret_key = secret_key.strip() if secret_key else None
         if environment is not None:
             config.environment = environment
+        if public_base_url is not None:
+            config.public_base_url = public_base_url.strip() if public_base_url else None
         
         from datetime import datetime
         config.updated_at = datetime.utcnow()
@@ -45,7 +48,7 @@ class PaymentGatewayService:
         db.session.commit()
         
         # Debug: verificar qué se guardó
-        print(f"DEBUG update_config - Guardado ID: {config.id}, MerchantCode: {config.merchant_code}, Terminal: {config.terminal}, SecretKey: {'Configurada' if config.secret_key else 'VACÍA'}")
+        print(f"DEBUG update_config - Guardado ID: {config.id}, MerchantCode: {config.merchant_code}, Terminal: {config.terminal}, PublicURL: {config.public_base_url or 'No configurada'}")
         
         return config
 
