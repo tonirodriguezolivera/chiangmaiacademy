@@ -101,3 +101,5 @@ if __name__ == '__main__':
         print("❌ El proceso falló. Revisa los errores arriba.")
         sys.exit(1)
 
+
+
