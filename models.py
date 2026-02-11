@@ -75,6 +75,8 @@ class PaymentGatewayConfig(db.Model):
     # URLs de Redsys
     redsys_url_test = db.Column(db.String(200), default='https://sis-t.redsys.es:25443/sis/realizarPago')
     redsys_url_production = db.Column(db.String(200), default='https://sis.redsys.es/sis/realizarPago')
+    # URL base pública para notificaciones (opcional, si está vacío usa request.url_root)
+    public_base_url = db.Column(db.String(200))  # Ej: https://tudominio.com
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

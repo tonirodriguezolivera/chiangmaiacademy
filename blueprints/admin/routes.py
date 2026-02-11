@@ -49,6 +49,10 @@ class PaymentGatewayForm(FlaskForm):
     environment = SelectField('Entorno', [
         validators.DataRequired(message='El entorno es obligatorio')
     ], choices=[('test', 'Test (Pruebas)'), ('production', 'Production (Producción)')])
+    public_base_url = StringField('URL Base Pública (Opcional)', [
+        validators.Optional(),
+        validators.URL(message='Debe ser una URL válida')
+    ])
 
 # Funciones auxiliares para manejo de imágenes
 def allowed_file(filename, app):
@@ -248,12 +252,16 @@ def payment_gateway():
         if not secret_key_value and config and config.secret_key:
             secret_key_value = config.secret_key  # Mantener el valor existente
         
+        # 🔧 Limpiar la clave secreta antes de guardar (strip)
+        secret_key_clean = secret_key_value.strip() if secret_key_value else None
+        
         PaymentGatewayService.update_config(
             gateway_name=form.gateway_name.data,
             merchant_code=form.merchant_code.data or None,
             terminal=form.terminal.data or '001',
-            secret_key=secret_key_value or None,
-            environment=form.environment.data or 'test'
+            secret_key=secret_key_clean,
+            environment=form.environment.data or 'test',
+            public_base_url=form.public_base_url.data or None
         )
         flash('Configuración de Redsys actualizada exitosamente.', 'success')
         return redirect(url_for('admin.payment_gateway'))

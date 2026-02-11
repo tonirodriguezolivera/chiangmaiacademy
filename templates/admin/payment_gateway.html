@@ -27,6 +27,22 @@
         <div class="info-box">
             <p><strong>Nota:</strong> Configura aquí las credenciales de Redsys para procesar los pagos de los cursos. Puedes obtener estas credenciales desde tu panel de administración de Redsys.</p>
             <p><strong>Importante:</strong> En modo test, usa las credenciales de prueba proporcionadas por Redsys. Para producción, usa las credenciales reales.</p>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #e8f4f8; border-left: 4px solid #2196F3; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #1976D2;">📋 Datos de Prueba de RedSys (Entorno Test)</h4>
+                <p style="margin-bottom: 10px;"><strong>Para usar el entorno de pruebas, configura estos valores:</strong></p>
+                <ul style="margin-left: 20px; margin-bottom: 10px;">
+                    <li><strong>Código de Comercio:</strong> <code>999008881</code></li>
+                    <li><strong>Terminal:</strong> <code>001</code></li>
+                    <li><strong>Clave Secreta:</strong> <code>sq7HjrUOBfKmC576ILgskD5srU870gJ7</code></li>
+                    <li><strong>Entorno:</strong> <code>test</code></li>
+                </ul>
+                <p style="margin-bottom: 10px;"><strong>Tarjetas de prueba:</strong></p>
+                <ul style="margin-left: 20px; margin-bottom: 0;">
+                    <li><strong>Autorizada:</strong> <code>4548810000000003</code> (Caducidad: 12/49, CVV: 123)</li>
+                    <li><strong>Denegada:</strong> <code>1111111111111117</code> (Caducidad: 12/20)</li>
+                </ul>
+            </div>
         </div>
         
         <form method="POST" class="admin-form">
@@ -97,6 +113,19 @@
                 {% endif %}
             </div>
             
+            <div class="form-group">
+                <label for="public_base_url">URL Base Pública (Opcional)</label>
+                {{ form.public_base_url(class="form-control") }}
+                <small>URL pública de tu sitio (ej: https://tudominio.com). Si está vacío, se usará la URL de la petición actual. <strong>Importante:</strong> Usa esto cuando pruebes en local pero quieras que RedSys pueda hacer notificaciones a tu servidor público.</small>
+                {% if form.public_base_url.errors %}
+                    <div class="form-errors">
+                        {% for error in form.public_base_url.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Guardar Configuración</button>
                 <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
@@ -111,6 +140,7 @@
             <p><strong>Terminal:</strong> {{ config.terminal if config.terminal else 'No configurado' }}</p>
             <p><strong>Clave Secreta:</strong> {{ 'Configurada' if config.secret_key else 'No configurada' }}</p>
             <p><strong>Entorno:</strong> {{ config.environment|upper if config.environment else 'No configurado' }}</p>
+            <p><strong>URL Base Pública:</strong> {{ config.public_base_url if config.public_base_url else 'No configurada (usará URL de la petición)' }}</p>
             <p><strong>Última actualización:</strong> {{ config.updated_at.strftime('%d/%m/%Y %H:%M') if config.updated_at else 'N/A' }}</p>
         </div>
         {% endif %}
