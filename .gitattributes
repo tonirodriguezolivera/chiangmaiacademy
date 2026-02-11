@@ -1,0 +1,27 @@
+# Normaliza texto a LF en el repo
+* text=auto eol=lf
+
+# Archivos que suelen dar guerra
+*.py  text eol=lf
+*.js  text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf
+
+# Windows scripts (si los tienes)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binarios (que Git NO intente tocar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.pdf binary
+*.zip binary
+*.exe binary
