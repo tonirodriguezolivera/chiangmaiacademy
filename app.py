@@ -10,7 +10,6 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     # Crear carpeta de uploads si no existe
-    import os
     upload_folder = app.config.get('UPLOAD_FOLDER')
     if upload_folder and not os.path.exists(upload_folder):
         os.makedirs(upload_folder, exist_ok=True)
@@ -40,7 +39,10 @@ def create_app(config_class=Config):
 
     return app
 
-# Ejecutar directamente (desarrollo local con `flask run`)
+# LÍNEA CRÍTICA PARA CPANEL: 
+# Definimos 'app' en el ámbito global para que Passenger pueda encontrarla.
+app = create_app()
+
+# Este bloque se mantiene para que sigas pudiendo ejecutarlo localmente
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True)
