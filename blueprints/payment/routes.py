@@ -1,5 +1,5 @@
 # blueprints/payment/routes.py
-from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from . import bp
 from services.payment_service import PaymentService
 from services.user_service import UserService
@@ -84,18 +84,17 @@ def process_payment(payment_id):
         return redirect(url_for('main.index'))
     
     # Debug: loguear parámetros para verificar
-    from flask import current_app
     mp = payment_form_data['Ds_MerchantParameters']
     sig = payment_form_data['Ds_Signature']
-    current_app.logger.info(f"MP raw: {mp}")
-    current_app.logger.info(f"SIG raw: {sig}")
+    print(f"[Redsys] MP raw: {mp}", flush=True)
+    print(f"[Redsys] SIG raw: {sig}", flush=True)
     
     # Decodificar y verificar contenido
     try:
         decoded = RedsysService.decode_merchant_parameters(mp)
-        current_app.logger.info(f"MP decoded: {decoded}")
+        print(f"[Redsys] MP decoded: {decoded}", flush=True)
     except Exception as e:
-        current_app.logger.error(f"Error decodificando MP: {e}")
+        print(f"[Redsys] Error decodificando MP: {e}", flush=True)
     
     return render_template('payment/process_redsys.html', 
                          payment=payment, 
@@ -113,14 +112,18 @@ def redsys_notification():
     Esta ruta debe ser accesible públicamente (sin autenticación)
     """
     try:
+        payload = request.form.to_dict()
+        print(f"[Redsys] POST /notification payload: {payload} | IP={request.remote_addr}", flush=True)
         merchant_params = request.form.get('Ds_MerchantParameters', '')
         signature = request.form.get('Ds_Signature', '')
         
         if not merchant_params or not signature:
+            print("[Redsys] Notificación sin parámetros obligatorios.", flush=True)
             return jsonify({'error': 'Parámetros faltantes'}), 400
         
         # Procesar notificación
         result = RedsysService.process_notification(merchant_params, signature)
+        print(f"[Redsys] Resultado notificación: {result}", flush=True)
         
         if result.get('success'):
             # Pago exitoso
@@ -130,6 +133,7 @@ def redsys_notification():
             return jsonify({'status': 'error', 'message': result.get('error')}), 200
             
     except Exception as e:
+        print(f"[Redsys] Error general en /notification: {e}", flush=True)
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/redsys/ok')

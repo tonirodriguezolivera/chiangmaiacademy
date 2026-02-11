@@ -1,9 +1,13 @@
 # app.py
 from flask import Flask
+import sys
 from config import Config
 from extensions import db, login_manager
 from models import User
 import os
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 def create_app(config_class=Config):
     app = Flask(__name__)
