@@ -6,12 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainNav = document.getElementById('mainNav');
     
     if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', function() {
-            menuToggle.classList.toggle('active');
-            mainNav.classList.toggle('active');
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = mainNav.classList.toggle('active');
+            menuToggle.classList.toggle('active', isOpen);
+            menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+            mainNav.setAttribute('aria-hidden', !isOpen);
         });
         
-        // Close menu when clicking outside
+        // Cerrar menú al hacer clic fuera
         document.addEventListener('click', function(event) {
             const isClickInsideNav = mainNav.contains(event.target);
             const isClickOnToggle = menuToggle.contains(event.target);
@@ -19,15 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!isClickInsideNav && !isClickOnToggle && mainNav.classList.contains('active')) {
                 menuToggle.classList.remove('active');
                 mainNav.classList.remove('active');
+                mainNav.setAttribute('aria-hidden', 'true');
+                menuToggle.setAttribute('aria-label', 'Abrir menú');
             }
         });
         
-        // Close menu when clicking on a link
+        // Cerrar menú al hacer clic en un enlace
         const navLinks = mainNav.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
                 menuToggle.classList.remove('active');
                 mainNav.classList.remove('active');
+                mainNav.setAttribute('aria-hidden', 'true');
+                menuToggle.setAttribute('aria-label', 'Abrir menú');
             });
         });
     }

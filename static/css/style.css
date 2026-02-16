@@ -91,6 +91,11 @@ body {
     height: 16px;
 }
 
+/* Wrapper para que el menú desplegable se posicione debajo del header */
+.header-nav-wrapper {
+    position: relative;
+}
+
 /* Main Header */
 .main-header {
     background-color: var(--bg-white);
@@ -116,10 +121,19 @@ body {
     color: var(--text-dark);
 }
 
-.logo svg {
+.logo svg,
+.logo img {
     width: 40px;
     height: 40px;
+    flex-shrink: 0;
+}
+
+.logo svg {
     color: var(--text-dark);
+}
+
+.logo img {
+    object-fit: contain;
 }
 
 .logo-text {
