@@ -74,27 +74,29 @@
         <ul class="nav-menu">
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#quienes-somos">Quiénes somos</a></li>
+            <li><a href="{{ url_for('main.el_curso') }}">El Curso</a></li>
+            <li><a href="{{ url_for('main.certificacion') }}">Certificación</a></li>
+            <li><a href="{{ url_for('main.sobre_nosotros') }}">Sobre Nosotros</a></li>
             <li><a href="#cursos">Cursos</a></li>
             <li><a href="#contacto">Contacto</a></li>
-            <li><a href="{{ url_for('admin.login') }}">Admin</a></li>
         </ul>
     </div>
 </nav>
 </div>
 
 <!-- Hero Section -->
-<section class="hero-section" id="inicio">
+<section class="hero-section" id="inicio" style="background-image: url('{{ url_for('static', filename='images/WhatsApp Image 2026-02-15 at 11.33.06 (1).jpeg') }}');">
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <div class="container">
-            <h1 class="hero-title">Formación Profesional y Terapias Exclusivas</h1>
-            <a href="#register" class="btn-hero">Ver más</a>
+            <h1 class="hero-title">Formación Oficial en Masaje Tailandés</h1>
+            <a href="#testimonios" class="btn-hero">Ver más</a>
         </div>
     </div>
 </section>
 
 <!-- Testimonials Section -->
-<section class="testimonials-section">
+<section class="testimonials-section" id="testimonios">
     <div class="container">
         <div class="testimonials-header">
             <h2>Qué opinan nuestros alumnos y clientes</h2>
@@ -138,6 +140,36 @@
                     <span>Publicado en Trustindex</span>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Centro acreditado oficialmente -->
+<section class="wellness-section">
+    <div class="container">
+        <h2 class="section-title">Centro acreditado oficialmente</h2>
+        <div class="content-block-image">
+            <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-02-12 at 11.38.02 (2).jpeg') }}" alt="Entrega de diploma en el centro">
+        </div>
+    </div>
+</section>
+
+<!-- Acreditación Oficial -->
+<section class="wisdom-section">
+    <div class="container">
+        <h2 class="section-title">Acreditación Oficial</h2>
+        <div class="content-block-image">
+            <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-02-12 at 11.34.25.jpeg') }}" alt="Union Thai Traditional Medicine Society">
+        </div>
+    </div>
+</section>
+
+<!-- Reconocimiento Internacional -->
+<section class="wellness-section">
+    <div class="container">
+        <h2 class="section-title">Reconocimiento Internacional</h2>
+        <div class="content-block-image">
+            <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-02-12 at 11.38.02 (3).jpeg') }}" alt="Evento reconocimiento internacional">
         </div>
     </div>
 </section>
@@ -280,6 +312,9 @@
                 <ul class="footer-links">
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#quienes-somos">Quiénes somos</a></li>
+                    <li><a href="{{ url_for('main.el_curso') }}">El Curso</a></li>
+                    <li><a href="{{ url_for('main.certificacion') }}">Certificación</a></li>
+                    <li><a href="{{ url_for('main.sobre_nosotros') }}">Sobre Nosotros</a></li>
                     <li><a href="#formate">Fórmate</a></li>
                     <li><a href="#tratamientos">Tratamientos</a></li>
                     <li><a href="#proximos-cursos">Próximos cursos</a></li>
@@ -306,6 +341,12 @@
                     <a href="#" aria-label="Instagram">Instagram</a>
                     <!-- <a href="#" aria-label="Youtube">Youtube</a>
                     <a href="#" aria-label="Tripadvisor">Tripadvisor</a> -->
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Acreditación</h4>
+                <div class="footer-acreditacion">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-02-12 at 11.34.25.jpeg') }}" alt="Union Thai Traditional Medicine Society">
                 </div>
             </div>
         </div>

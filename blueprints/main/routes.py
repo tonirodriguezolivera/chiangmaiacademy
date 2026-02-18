@@ -9,6 +9,21 @@ def index():
     courses = CourseService.get_active_courses()
     return render_template('index.html', courses=courses)
 
+@bp.route('/el-curso')
+def el_curso():
+    """Página El Curso"""
+    return render_template('el_curso.html')
+
+@bp.route('/certificacion')
+def certificacion():
+    """Página Certificación Oficial"""
+    return render_template('certificacion.html')
+
+@bp.route('/sobre-nosotros')
+def sobre_nosotros():
+    """Página Sobre Nosotros"""
+    return render_template('sobre_nosotros.html')
+
 @bp.route('/course/<int:course_id>')
 def course_detail(course_id):
     """Detalle del curso y compra"""
