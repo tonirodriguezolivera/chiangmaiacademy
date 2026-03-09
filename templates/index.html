@@ -90,7 +90,7 @@
     <div class="hero-content">
         <div class="container">
             <h1 class="hero-title">Formación Oficial en Masaje Tailandés</h1>
-            <a href="#testimonios" class="btn-hero">Ver más</a>
+            <!-- <a href="#testimonios" class="btn-hero">Ver más</a> -->
         </div>
     </div>
 </section>
@@ -248,9 +248,22 @@
         <div class="courses-grid">
             {% for course in courses %}
             <div class="course-card">
-                {% if course.image_filename %}
+                {% set image_urls = course.get_image_urls() %}
+                {% if image_urls %}
                 <div class="course-image">
-                    <img src="{{ course.get_image_url() }}" alt="{{ course.title }}">
+                    {% if image_urls|length > 1 %}
+                    <div class="course-carousel" data-carousel>
+                        <button class="carousel-arrow prev" type="button" data-carousel-prev aria-label="Imagen anterior">&#10094;</button>
+                        <div class="carousel-track" data-carousel-track>
+                            {% for image_url in image_urls %}
+                            <img src="{{ image_url }}" alt="{{ course.title }} - imagen {{ loop.index }}" class="carousel-slide{% if loop.first %} active{% endif %}" data-carousel-slide>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-arrow next" type="button" data-carousel-next aria-label="Imagen siguiente">&#10095;</button>
+                    </div>
+                    {% else %}
+                    <img src="{{ image_urls[0] }}" alt="{{ course.title }}">
+                    {% endif %}
                 </div>
                 {% endif %}
                 <div class="course-header">

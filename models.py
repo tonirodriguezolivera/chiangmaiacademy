@@ -38,15 +38,60 @@ class Course(db.Model):
     
     # Relación con pagos
     payments = db.relationship('Payment', backref='course', lazy=True)
+    images = db.relationship(
+        'CourseImage',
+        backref='course',
+        lazy=True,
+        cascade='all, delete-orphan',
+        order_by='CourseImage.id.asc()'
+    )
     
     def __repr__(self):
         return f'<Course {self.title}>'
     
     def get_image_url(self):
         """Retorna la URL de la imagen del curso"""
+        return self.get_image_urls()[0]
+
+    def get_uploaded_image_urls(self):
+        """Retorna solo imágenes subidas (sin fallback por defecto)."""
+        image_urls = []
+        seen = set()
+
         if self.image_filename:
-            return f'/static/uploads/courses/{self.image_filename}'
-        return '/static/images/default-course.jpg'  # Imagen por defecto
+            legacy_url = f'/static/uploads/courses/{self.image_filename}'
+            image_urls.append(legacy_url)
+            seen.add(legacy_url)
+
+        for image in self.images:
+            image_url = image.get_image_url()
+            if image_url not in seen:
+                image_urls.append(image_url)
+                seen.add(image_url)
+
+        return image_urls
+
+    def get_image_urls(self):
+        """Retorna todas las imágenes del curso con fallback por defecto."""
+        image_urls = self.get_uploaded_image_urls()
+        if image_urls:
+            return image_urls
+        if self.image_filename:
+            return [f'/static/uploads/courses/{self.image_filename}']
+        return ['/static/images/default-course.jpg']
+
+
+class CourseImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False, index=True)
+    filename = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<CourseImage {self.filename}>'
+
+    def get_image_url(self):
+        return f'/static/uploads/courses/{self.filename}'
 
 
 class Payment(db.Model):

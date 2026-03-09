@@ -6,14 +6,15 @@ from . import bp
 from services.course_service import CourseService
 from services.payment_gateway_service import PaymentGatewayService
 from services.payment_service import PaymentService
-from models import User
+from models import User, CourseImage
 from extensions import db
 from config import Config
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import MultipleFileField
 from wtforms import StringField, TextAreaField, FloatField, BooleanField, SelectField, validators
 import os
 import uuid
+from werkzeug.datastructures import FileStorage
 
 class CourseForm(FlaskForm):
     title = StringField('Título del Curso', [
@@ -25,9 +26,7 @@ class CourseForm(FlaskForm):
         validators.DataRequired(message='El precio es obligatorio'),
         validators.NumberRange(min=0, message='El precio debe ser mayor a 0')
     ])
-    image = FileField('Imagen del Curso', [
-        FileAllowed(['jpg', 'jpeg', 'png', 'gif', 'webp'], 'Solo se permiten imágenes (JPG, PNG, GIF, WEBP)')
-    ])
+    images = MultipleFileField('Imágenes del Curso')
     is_active = BooleanField('Curso Activo')
 
 class PaymentGatewayForm(FlaskForm):
@@ -78,6 +77,37 @@ def save_course_image(file, app):
             file.save(filepath)
             return unique_filename
     return None
+
+def save_course_images(files, app):
+    """Guarda múltiples imágenes del curso y retorna los nombres guardados."""
+    if not files:
+        return []
+
+    saved_filenames = []
+    for file in files:
+        if not isinstance(file, FileStorage):
+            continue
+        if not file.filename:
+            continue
+        filename = save_course_image(file, app)
+        if filename:
+            saved_filenames.append(filename)
+    return saved_filenames
+
+def has_selected_uploads(files):
+    """Indica si el usuario seleccionó al menos un archivo con nombre."""
+    if not files:
+        return False
+    return any(isinstance(file, FileStorage) and file.filename for file in files)
+
+def ensure_legacy_image_in_gallery(course):
+    """Sincroniza image_filename legacy dentro de la galería CourseImage."""
+    if not course or not course.image_filename:
+        return
+    already_exists = any(image.filename == course.image_filename for image in course.images)
+    if not already_exists:
+        db.session.add(CourseImage(course_id=course.id, filename=course.image_filename))
+        db.session.commit()
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -160,15 +190,15 @@ def course_new():
     
     form = CourseForm()
     if form.validate_on_submit():
-        image_filename = None
-        if form.image.data:
-            image_filename = save_course_image(form.image.data, current_app)
+        uploaded_image_filenames = save_course_images(form.images.data, current_app)
+        image_filename = uploaded_image_filenames[0] if uploaded_image_filenames else None
         
         course = CourseService.create_course(
             title=form.title.data,
             description=form.description.data,
             price=form.price.data,
-            image_filename=image_filename
+            image_filename=image_filename,
+            image_filenames=uploaded_image_filenames
         )
         flash('Curso creado exitosamente.', 'success')
         return redirect(url_for('admin.courses_list'))
@@ -187,20 +217,22 @@ def course_edit(course_id):
     if not course:
         flash('Curso no encontrado.', 'error')
         return redirect(url_for('admin.courses_list'))
-    
+
+    ensure_legacy_image_in_gallery(course)
+    course = CourseService.get_course_by_id(course_id)
+
     form = CourseForm(obj=course)
+    # Evita conflicto entre campo de formulario "images" y relación ORM "course.images".
+    if request.method == 'GET':
+        form.images.data = []
     if form.validate_on_submit():
-        image_filename = course.image_filename  # Mantener la imagen actual por defecto
-        
-        # Si se sube una nueva imagen, guardarla
-        if form.image.data:
-            # Eliminar imagen anterior si existe
-            if course.image_filename:
-                old_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], course.image_filename)
-                if os.path.exists(old_image_path):
-                    os.remove(old_image_path)
-            
-            image_filename = save_course_image(form.image.data, current_app)
+        image_filename = course.image_filename
+        had_selected_files = has_selected_uploads(form.images.data)
+        uploaded_image_filenames = save_course_images(form.images.data, current_app)
+        if uploaded_image_filenames and not image_filename:
+            image_filename = uploaded_image_filenames[0]
+        if had_selected_files and not uploaded_image_filenames:
+            flash('No se pudo subir ninguna imagen. Revisa que el formato sea JPG, PNG, GIF o WEBP.', 'error')
         
         CourseService.update_course(
             course_id,
@@ -208,12 +240,53 @@ def course_edit(course_id):
             description=form.description.data,
             price=form.price.data,
             is_active=form.is_active.data,
-            image_filename=image_filename
+            image_filename=image_filename,
+            new_image_filenames=uploaded_image_filenames
         )
-        flash('Curso actualizado exitosamente.', 'success')
-        return redirect(url_for('admin.courses_list'))
+        if uploaded_image_filenames:
+            flash(f'Se añadieron {len(uploaded_image_filenames)} imagen(es) al curso.', 'success')
+        else:
+            flash('Curso actualizado exitosamente.', 'success')
+        return redirect(url_for('admin.course_edit', course_id=course_id))
     
     return render_template('admin/course_form.html', form=form, course=course, title='Editar Curso')
+
+@bp.route('/courses/<int:course_id>/images/<int:image_id>/delete', methods=['POST'])
+@login_required
+def course_image_delete(course_id, image_id):
+    """Elimina una imagen concreta de un curso."""
+    if not current_user.is_admin:
+        flash('No tienes permisos para acceder a esta sección.', 'error')
+        return redirect(url_for('main.index'))
+
+    course = CourseService.get_course_by_id(course_id)
+    if not course:
+        flash('Curso no encontrado.', 'error')
+        return redirect(url_for('admin.courses_list'))
+
+    image = CourseImage.query.filter_by(id=image_id, course_id=course_id).first()
+    if not image:
+        flash('Imagen no encontrada.', 'error')
+        return redirect(url_for('admin.course_edit', course_id=course_id))
+
+    filename = image.filename
+    db.session.delete(image)
+    db.session.flush()
+
+    remaining_images = CourseImage.query.filter_by(course_id=course_id).order_by(CourseImage.id.asc()).all()
+    if course.image_filename == filename:
+        course.image_filename = remaining_images[0].filename if remaining_images else None
+
+    # Solo borra el archivo físico si ya no está referenciado por ningún curso.
+    still_used = CourseImage.query.filter_by(filename=filename).first()
+    if not still_used:
+        image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+    db.session.commit()
+    flash('Imagen eliminada correctamente.', 'success')
+    return redirect(url_for('admin.course_edit', course_id=course_id))
 
 @bp.route('/courses/<int:course_id>/delete', methods=['POST'])
 @login_required

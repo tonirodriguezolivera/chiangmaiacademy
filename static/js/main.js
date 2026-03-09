@@ -142,6 +142,37 @@ document.addEventListener('DOMContentLoaded', function() {
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
+
+    // Course image carousel
+    const carousels = document.querySelectorAll('[data-carousel]');
+    carousels.forEach(carousel => {
+        const slides = carousel.querySelectorAll('[data-carousel-slide]');
+        const prevButton = carousel.querySelector('[data-carousel-prev]');
+        const nextButton = carousel.querySelector('[data-carousel-next]');
+        let currentIndex = 0;
+
+        if (!slides.length || !prevButton || !nextButton) {
+            return;
+        }
+
+        const showSlide = (index) => {
+            slides.forEach((slide, slideIndex) => {
+                slide.classList.toggle('active', slideIndex === index);
+            });
+        };
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        });
+
+        showSlide(currentIndex);
+    });
 });
 
 // Add slideOut animation

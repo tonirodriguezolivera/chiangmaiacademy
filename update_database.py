@@ -41,6 +41,15 @@ if os.path.exists(db_path):
                 print("Agregando columna image_filename a la tabla course...")
                 cursor.execute("ALTER TABLE course ADD COLUMN image_filename VARCHAR(255)")
                 conn.commit()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS course_image (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    course_id INTEGER NOT NULL,
+                    filename VARCHAR(255) NOT NULL,
+                    created_at DATETIME,
+                    FOREIGN KEY(course_id) REFERENCES course(id)
+                )
+            """)
             # Crear tabla payment_gateway_config si no existe
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS payment_gateway_config (

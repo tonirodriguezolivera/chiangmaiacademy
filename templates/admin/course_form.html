@@ -49,22 +49,52 @@
             </div>
             
             <div class="form-group">
-                <label for="image">Imagen del Curso</label>
-                {{ form.image(class="form-control", type="file", accept="image/*") }}
-                {% if form.image.errors %}
+                <label for="images">Imágenes del Curso</label>
+                {{ form.images(id="imagesInput", class="form-control", type="file", accept="image/*", multiple=true) }}
+                <div style="margin-top: 8px;">
+                    <small><strong>Importante:</strong> después de elegir archivos, pulsa <strong>Subir imágenes y guardar</strong> (o <strong>Guardar Curso</strong> al final).</small>
+                </div>
+                <div id="selectedImagesPreview" style="display: none; margin-top: 10px;">
+                    <p style="margin-bottom: 6px;"><strong>Archivos seleccionados (pendientes de guardar):</strong></p>
+                    <ul id="selectedImagesList" style="padding-left: 18px; margin: 0;"></ul>
+                </div>
+                <div style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary">Subir imágenes y guardar</button>
+                </div>
+                {% if form.images.errors %}
                     <div class="form-errors">
-                        {% for error in form.image.errors %}
+                        {% for error in form.images.errors %}
                             <span class="error">{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% endif %}
-                {% if course and course.image_filename %}
+                {% if course %}
+                {% set course_images = course.images %}
+                {% if course_images %}
                 <div style="margin-top: 10px;">
-                    <p>Imagen actual:</p>
-                    <img src="{{ course.get_image_url() }}" alt="{{ course.title }}" style="max-width: 200px; max-height: 200px; border-radius: 5px; margin-top: 10px;">
+                    <p>Imágenes actuales:</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                        {% for image in course_images %}
+                        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+                            <img src="{{ image.get_image_url() }}" alt="{{ course.title }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 5px;">
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                                style="padding: 6px 10px; font-size: 12px;"
+                                formmethod="post"
+                                formaction="{{ url_for('admin.course_image_delete', course_id=course.id, image_id=image.id) }}"
+                                formnovalidate
+                                onclick="return confirm('¿Eliminar esta imagen?');"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
-                <small>Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5MB</small>
+                {% endif %}
+                <small>Formatos permitidos: JPG, PNG, GIF, WEBP. Puedes seleccionar varias imágenes (máx. 5MB por archivo).</small>
             </div>
             
             <div class="form-group checkbox-group">
@@ -81,5 +111,36 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('imagesInput');
+    const preview = document.getElementById('selectedImagesPreview');
+    const list = document.getElementById('selectedImagesList');
+
+    if (!input || !preview || !list) {
+        return;
+    }
+
+    input.addEventListener('change', function () {
+        list.innerHTML = '';
+
+        if (!input.files || !input.files.length) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        Array.from(input.files).forEach(function (file) {
+            const li = document.createElement('li');
+            li.textContent = file.name;
+            list.appendChild(li);
+        });
+
+        preview.style.display = 'block';
+    });
+});
+</script>
 {% endblock %}
 

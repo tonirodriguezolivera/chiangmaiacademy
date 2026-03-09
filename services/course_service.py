@@ -1,13 +1,20 @@
 # services/course_service.py
 from extensions import db
-from models import Course
+from models import Course, CourseImage
 
 class CourseService:
     @staticmethod
-    def create_course(title, description, price, image_filename=None):
+    def create_course(title, description, price, image_filename=None, image_filenames=None):
         """Crea un nuevo curso"""
         course = Course(title=title, description=description, price=price, image_filename=image_filename)
         db.session.add(course)
+        db.session.flush()
+
+        if image_filenames:
+            for filename in image_filenames:
+                if filename:
+                    db.session.add(CourseImage(course_id=course.id, filename=filename))
+
         db.session.commit()
         return course
     
@@ -27,7 +34,7 @@ class CourseService:
         return Course.query.order_by(Course.created_at.desc()).all()
     
     @staticmethod
-    def update_course(course_id, title=None, description=None, price=None, is_active=None, image_filename=None):
+    def update_course(course_id, title=None, description=None, price=None, is_active=None, image_filename=None, new_image_filenames=None):
         """Actualiza un curso"""
         course = Course.query.get(course_id)
         if not course:
@@ -43,6 +50,10 @@ class CourseService:
             course.is_active = is_active
         if image_filename is not None:
             course.image_filename = image_filename
+        if new_image_filenames:
+            for filename in new_image_filenames:
+                if filename:
+                    db.session.add(CourseImage(course_id=course.id, filename=filename))
         
         from datetime import datetime
         course.updated_at = datetime.utcnow()
