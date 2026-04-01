@@ -145,14 +145,14 @@
 </section>
 
 <!-- Centro acreditado oficialmente -->
-<section class="wellness-section">
+<!-- <section class="wellness-section">
     <div class="container">
         <h2 class="section-title">Centro acreditado oficialmente</h2>
         <div class="content-block-image">
             <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-02-15 at 11.33.06 (1).jpeg') }}" alt="Entrega de diploma en el centro">
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Acreditación Oficial -->
 <section class="wisdom-section">
@@ -273,9 +273,17 @@
                 {% if course.description %}
                 <p class="course-description">{{ course.description }}</p>
                 {% endif %}
-                <a href="{{ url_for('payment.buy_course', course_id=course.id) }}" class="btn btn-primary">
-                    Comprar Curso
-                </a>
+                <div class="course-actions">
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary btn-add-to-selection"
+                        data-course-id="{{ course.id }}"
+                        data-course-title="{{ course.title|e }}"
+                        data-course-price="{{ '%.2f'|format(course.price) }}"
+                    >
+                        Añadir a selección
+                    </button>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -286,6 +294,32 @@
         {% endif %}
     </div>
 </section>
+
+<!-- Panel lateral de selección de cursos / "carrito" -->
+<div id="course-selection-sidebar" class="course-selection-sidebar">
+    <div class="sidebar-header">
+        <h3>Tu selección</h3>
+        <button type="button" id="sidebarCloseBtn" class="sidebar-close-btn">&times;</button>
+    </div>
+    <div class="sidebar-body">
+        <div id="selectedCoursesList" class="selected-courses-list">
+            <p class="empty-selection">Todavía no has seleccionado ningún curso.</p>
+        </div>
+        <div id="offersBreakdown" class="offers-breakdown" style="display: none;"></div>
+    </div>
+    <div class="sidebar-footer">
+        <div class="sidebar-total">
+            <span>Total:</span>
+            <strong id="sidebarTotalAmount">0.00 €</strong>
+        </div>
+    </div>
+</div>
+
+<!-- Botón flotante para abrir el panel -->
+<button type="button" id="openSelectionSidebarBtn" class="open-selection-sidebar-btn">
+    Ver selección
+    <span id="selectionCountBadge" class="selection-count-badge" style="display:none;">0</span>
+</button>
 
 <!-- Contact Section -->
 <section class="contact-section" id="contacto">
@@ -370,4 +404,310 @@
         </div>
     </div>
 </footer>
+
+<style>
+.course-selection-sidebar {
+    position: fixed;
+    top: 0;
+    right: -380px;
+    width: 360px;
+    max-width: 90vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 16px rgba(0,0,0,0.15);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+    padding: 16px 18px;
+}
+.course-selection-sidebar.is-open {
+    right: 0;
+}
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.sidebar-close-btn {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+.sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+.selected-courses-list .course-item {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.selected-courses-list .course-info {
+    max-width: 70%;
+}
+.selected-courses-list .course-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+.selected-courses-list .course-price {
+    font-size: 13px;
+    color: #555;
+}
+.selected-courses-list .remove-btn {
+    border: none;
+    background: none;
+    color: #c00;
+    cursor: pointer;
+    font-size: 13px;
+}
+.offers-breakdown {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dashed #ddd;
+    font-size: 13px;
+}
+.offers-breakdown h4 {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+.sidebar-footer {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sidebar-total span {
+    font-size: 14px;
+}
+.sidebar-total strong {
+    font-size: 16px;
+}
+.open-selection-sidebar-btn {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9998;
+    background: #4a7c59;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.selection-count-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    background: #ff6b6b;
+    border-radius: 999px;
+    font-size: 12px;
+}
+.empty-selection {
+    font-size: 13px;
+    color: #777;
+}
+.course-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+}
+.course-actions .btn-add-to-selection {
+    min-width: 60%;
+    text-align: center;
+}
+</style>
+
+<script>
+    const ACTIVE_OFFERS = {{ offers|tojson }};
+</script>
+
+<script>
+(function() {
+    const selected = [];
+
+    const sidebar = document.getElementById('course-selection-sidebar');
+    const openBtn = document.getElementById('openSelectionSidebarBtn');
+    const closeBtn = document.getElementById('sidebarCloseBtn');
+    const listEl = document.getElementById('selectedCoursesList');
+    const offersEl = document.getElementById('offersBreakdown');
+    const totalEl = document.getElementById('sidebarTotalAmount');
+    const badgeEl = document.getElementById('selectionCountBadge');
+    const checkoutBtnId = 'sidebarCheckoutBtn';
+
+    function openSidebar() {
+        sidebar.classList.add('is-open');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('is-open');
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn-add-to-selection');
+        if (!btn) return;
+
+        const id = parseInt(btn.getAttribute('data-course-id'), 10);
+        const title = btn.getAttribute('data-course-title') || '';
+        const price = parseFloat(btn.getAttribute('data-course-price') || '0');
+
+        const existingIndex = selected.findIndex(c => c.id === id);
+
+        if (existingIndex === -1) {
+            selected.push({id, title, price});
+            btn.textContent = 'Quitar de la selección';
+            btn.classList.add('is-selected');
+            openSidebar();
+        } else {
+            selected.splice(existingIndex, 1);
+            btn.textContent = 'Añadir a selección';
+            btn.classList.remove('is-selected');
+        }
+
+        refreshSidebar();
+    });
+
+    listEl.addEventListener('click', function(e) {
+        const btn = e.target.closest('.remove-btn');
+        if (!btn) return;
+
+        const id = parseInt(btn.getAttribute('data-course-id'), 10);
+        const index = selected.findIndex(c => c.id === id);
+        if (index !== -1) {
+            selected.splice(index, 1);
+            const cardBtn = document.querySelector('.btn-add-to-selection[data-course-id="' + id + '"]');
+            if (cardBtn) {
+                cardBtn.textContent = 'Añadir a selección';
+                cardBtn.classList.remove('is-selected');
+            }
+        }
+        refreshSidebar();
+    });
+
+    function refreshSidebar() {
+        const count = selected.length;
+        if (count > 0) {
+            badgeEl.style.display = 'inline-block';
+            badgeEl.textContent = String(count);
+        } else {
+            badgeEl.style.display = 'none';
+        }
+
+        if (count === 0) {
+            listEl.innerHTML = '<p class="empty-selection">Todavía no has seleccionado ningún curso.</p>';
+            totalEl.textContent = '0.00 €';
+            offersEl.style.display = 'none';
+            offersEl.innerHTML = '';
+            return;
+        }
+
+        listEl.innerHTML = selected.map(c => {
+            const priceText = c.price.toFixed(2) + ' €';
+            return `
+                <div class="course-item">
+                    <div class="course-info">
+                        <div class="course-title">${c.title}</div>
+                        <div class="course-price">${priceText}</div>
+                    </div>
+                    <button type="button" class="remove-btn" data-course-id="${c.id}">Quitar</button>
+                </div>
+            `;
+        }).join('');
+
+        const unitPrice = selected[0].price || 0;
+        const baseTotal = count * unitPrice;
+
+        const offers = Array.isArray(ACTIVE_OFFERS) ? ACTIVE_OFFERS.slice() : [];
+        offers.sort((a, b) => b.quantity - a.quantity);
+
+        let remaining = count;
+        let offerTotal = 0;
+        const appliedOffers = [];
+
+        offers.forEach(function(offer) {
+            if (!offer.is_active) return;
+            if (remaining <= 0) return;
+            const qty = offer.quantity || 0;
+            if (!qty || qty <= 0) return;
+
+            const packs = Math.floor(remaining / qty);
+            if (packs > 0) {
+                offerTotal += packs * offer.price;
+                remaining -= packs * qty;
+                appliedOffers.push({
+                    quantity: qty,
+                    price: offer.price,
+                    packs: packs
+                });
+            }
+        });
+
+        const remainingTotal = remaining * unitPrice;
+        const finalTotal = offerTotal + remainingTotal;
+
+        totalEl.textContent = finalTotal.toFixed(2) + ' €';
+
+        if (appliedOffers.length > 0 || finalTotal !== baseTotal) {
+            offersEl.style.display = 'block';
+            const lines = [];
+
+            lines.push('<h4>Ofertas aplicadas</h4>');
+
+            if (appliedOffers.length === 0) {
+                lines.push('<p>No hay ofertas específicas aplicadas, pero el precio puede ajustarse según la configuración.</p>');
+            } else {
+                appliedOffers.forEach(function(o) {
+                    const lineTotal = o.packs * o.price;
+                    lines.push(
+                        `<p>${o.packs} x oferta de ${o.quantity} curso(s) por ${o.price.toFixed(2)} €</p>`
+                    );
+                });
+            }
+
+            lines.push(`<p><strong>Total sin oferta estimado:</strong> ${baseTotal.toFixed(2)} €</p>`);
+            lines.push(`<p><strong>Ahorras aproximadamente:</strong> ${(baseTotal - finalTotal).toFixed(2)} €</p>`);
+
+            offersEl.innerHTML = lines.join('');
+        } else {
+            offersEl.style.display = 'none';
+            offersEl.innerHTML = '';
+        }
+
+        // Botón de checkout (proceder al pago)
+        let checkoutBtn = document.getElementById(checkoutBtnId);
+        if (!checkoutBtn) {
+            checkoutBtn = document.createElement('button');
+            checkoutBtn.id = checkoutBtnId;
+            checkoutBtn.type = 'button';
+            checkoutBtn.className = 'btn btn-primary';
+            checkoutBtn.textContent = 'Proceder al pago';
+            sidebar.querySelector('.sidebar-footer').appendChild(checkoutBtn);
+
+            checkoutBtn.addEventListener('click', function () {
+                if (selected.length === 0) {
+                    alert('No has seleccionado ningún curso.');
+                    return;
+                }
+                const ids = selected.map(c => c.id);
+                const baseUrl = "{{ url_for('payment.cart_checkout') }}";
+                const query = '?ids=' + encodeURIComponent(ids.join(','));
+                window.location.href = baseUrl + query;
+            });
+        }
+    }
+})();
+</script>
+
 {% endblock %}

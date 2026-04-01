@@ -135,3 +135,15 @@ class PaymentGatewayConfig(db.Model):
             return self.redsys_url_production or 'https://sis.redsys.es/sis/realizarPago'
         return self.redsys_url_test or 'https://sis-t.redsys.es:25443/sis/realizarPago'
 
+
+class Offer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)  # nº de cursos del pack
+    price = db.Column(db.Float, nullable=False)       # precio total del pack
+    description = db.Column(db.String(255))           # texto opcional para admin
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Offer {self.quantity} cursos por {self.price}€>'
+

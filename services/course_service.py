@@ -34,6 +34,13 @@ class CourseService:
         return Course.query.order_by(Course.created_at.desc()).all()
     
     @staticmethod
+    def get_courses_by_ids(course_ids):
+        """Obtiene cursos por una lista de IDs"""
+        if not course_ids:
+            return []
+        return Course.query.filter(Course.id.in_(course_ids), Course.is_active == True).order_by(Course.created_at.desc()).all()
+    
+    @staticmethod
     def update_course(course_id, title=None, description=None, price=None, is_active=None, image_filename=None, new_image_filenames=None):
         """Actualiza un curso"""
         course = Course.query.get(course_id)
