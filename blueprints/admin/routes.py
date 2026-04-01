@@ -6,7 +6,8 @@ from . import bp
 from services.course_service import CourseService
 from services.payment_gateway_service import PaymentGatewayService
 from services.payment_service import PaymentService
-from models import User, CourseImage
+from services.offer_service import OfferService
+from models import User, CourseImage, Offer
 from extensions import db
 from config import Config
 from flask_wtf import FlaskForm
@@ -28,6 +29,22 @@ class CourseForm(FlaskForm):
     ])
     images = MultipleFileField('Imágenes del Curso')
     is_active = BooleanField('Curso Activo')
+
+
+class OfferForm(FlaskForm):
+    quantity = FloatField('Cantidad de cursos en la oferta', [
+        validators.DataRequired(message='La cantidad es obligatoria'),
+        validators.NumberRange(min=1, message='La cantidad debe ser mayor a 0')
+    ])
+    price = FloatField('Precio total del pack', [
+        validators.DataRequired(message='El precio es obligatorio'),
+        validators.NumberRange(min=0, message='El precio debe ser mayor o igual a 0')
+    ])
+    description = StringField('Descripción (opcional)', [
+        validators.Optional(),
+        validators.Length(max=255)
+    ])
+    is_active = BooleanField('Oferta activa')
 
 class PaymentGatewayForm(FlaskForm):
     gateway_name = StringField('Pasarela de Pago', [
@@ -353,3 +370,79 @@ def buyers_list():
     
     payments = PaymentService.get_payments_with_users()
     return render_template('admin/buyers_list.html', payments=payments)
+
+
+# ========== OFERTAS ==========
+
+@bp.route('/offers')
+@login_required
+def offers_list():
+    """Lista de ofertas por cantidad"""
+    if not current_user.is_admin:
+        flash('No tienes permisos para acceder a esta sección.', 'error')
+        return redirect(url_for('main.index'))
+
+    offers = Offer.query.order_by(Offer.quantity.asc()).all()
+    return render_template('admin/offers_list.html', offers=offers)
+
+
+@bp.route('/offers/new', methods=['GET', 'POST'])
+@login_required
+def offer_new():
+    """Crear nueva oferta"""
+    if not current_user.is_admin:
+        flash('No tienes permisos para acceder a esta sección.', 'error')
+        return redirect(url_for('main.index'))
+
+    form = OfferForm()
+    if form.validate_on_submit():
+        offer = Offer(
+            quantity=int(form.quantity.data),
+            price=form.price.data,
+            description=form.description.data or None,
+            is_active=form.is_active.data,
+        )
+        db.session.add(offer)
+        db.session.commit()
+        flash('Oferta creada correctamente.', 'success')
+        return redirect(url_for('admin.offers_list'))
+
+    return render_template('admin/offer_form.html', form=form, title='Nueva Oferta')
+
+
+@bp.route('/offers/<int:offer_id>/edit', methods=['GET', 'POST'])
+@login_required
+def offer_edit(offer_id):
+    """Editar oferta existente"""
+    if not current_user.is_admin:
+        flash('No tienes permisos para acceder a esta sección.', 'error')
+        return redirect(url_for('main.index'))
+
+    offer = Offer.query.get_or_404(offer_id)
+    form = OfferForm(obj=offer)
+
+    if form.validate_on_submit():
+        offer.quantity = int(form.quantity.data)
+        offer.price = form.price.data
+        offer.description = form.description.data or None
+        offer.is_active = form.is_active.data
+        db.session.commit()
+        flash('Oferta actualizada correctamente.', 'success')
+        return redirect(url_for('admin.offers_list'))
+
+    return render_template('admin/offer_form.html', form=form, title='Editar Oferta', offer=offer)
+
+
+@bp.route('/offers/<int:offer_id>/delete', methods=['POST'])
+@login_required
+def offer_delete(offer_id):
+    """Eliminar oferta"""
+    if not current_user.is_admin:
+        flash('No tienes permisos para acceder a esta sección.', 'error')
+        return redirect(url_for('main.index'))
+
+    offer = Offer.query.get_or_404(offer_id)
+    db.session.delete(offer)
+    db.session.commit()
+    flash('Oferta eliminada correctamente.', 'success')
+    return redirect(url_for('admin.offers_list'))

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Procesando Pago - {{ course.title }}{% endblock %}
+{% block title %}Procesando Pago - {% if course %}{{ course.title }}{% else %}Pack de cursos{% endif %}{% endblock %}
 
 {% block content %}
 <div class="payment-process">
@@ -11,8 +11,12 @@
             
             <div class="course-summary">
                 <h3>Resumen del pedido</h3>
+                {% if course %}
                 <p><strong>Curso:</strong> {{ course.title }}</p>
-                <p><strong>Precio:</strong> {{ "%.2f"|format(course.price) }} €</p>
+                {% else %}
+                <p><strong>Concepto:</strong> Pack de cursos Chiangmai Academy</p>
+                {% endif %}
+                <p><strong>Precio:</strong> {{ "%.2f"|format(payment.amount) }} €</p>
                 <p><strong>Cliente:</strong> {{ user.name }}</p>
             </div>
             

@@ -4,6 +4,7 @@ from . import bp
 from services.payment_service import PaymentService
 from services.user_service import UserService
 from services.course_service import CourseService
+from services.offer_service import OfferService
 from services.redsys_service import RedsysService
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, TelField, validators
@@ -41,7 +42,7 @@ def buy_course(course_id):
             phone=form.phone.data
         )
         
-        # Crear pago pendiente
+        # Crear pago pendiente (importe = precio del curso individual)
         payment = PaymentService.create_payment(user.id, course.id, course.price)
         
         return redirect(url_for('payment.process_payment', payment_id=payment.id))
@@ -62,7 +63,7 @@ def process_payment(payment_id):
         return redirect(url_for('payment.success', payment_id=payment_id))
     
     user = UserService.get_user_by_id(payment.user_id)
-    course = CourseService.get_course_by_id(payment.course_id)
+    course = CourseService.get_course_by_id(payment.course_id) if payment.course_id else None
     
     # Verificar configuración de Redsys
     redsys_config = RedsysService.get_config()
@@ -73,10 +74,11 @@ def process_payment(payment_id):
         return redirect(url_for('main.index'))
     
     # Generar formulario de pago para Redsys
+    course_title = course.title if course else "Pack de cursos Chiangmai Academy"
     payment_form_data = RedsysService.create_payment_form(
         payment_id=payment_id,
-        course_title=course.title,
-        amount=course.price
+        course_title=course_title,
+        amount=payment.amount
     )
     
     if not payment_form_data:
@@ -96,12 +98,65 @@ def process_payment(payment_id):
     except Exception as e:
         print(f"[Redsys] Error decodificando MP: {e}", flush=True)
     
-    return render_template('payment/process_redsys.html', 
-                         payment=payment, 
-                         user=user,
-                         course=course,
-                         payment_form=payment_form_data,
-                         config=redsys_config)
+    return render_template('payment/process_redsys.html',
+                           payment=payment,
+                           user=user,
+                           course=course,
+                           payment_form=payment_form_data,
+                           config=redsys_config)
+
+
+@bp.route('/cart', methods=['GET', 'POST'])
+def cart_checkout():
+    """
+    Checkout para varios cursos seleccionados desde la sección emergente.
+    Los IDs de curso llegan en el parámetro "ids" separados por comas.
+    """
+    ids_param = request.args.get('ids') if request.method == 'GET' else request.form.get('course_ids')
+    if not ids_param:
+        flash('No se han seleccionado cursos para el pago.', 'error')
+        return redirect(url_for('main.index'))
+
+    try:
+        course_ids = [int(x) for x in ids_param.split(',') if x.strip()]
+    except ValueError:
+        flash('Selección de cursos no válida.', 'error')
+        return redirect(url_for('main.index'))
+
+    courses = CourseService.get_courses_by_ids(course_ids)
+    if not courses:
+        flash('No se han encontrado cursos válidos para el pago.', 'error')
+        return redirect(url_for('main.index'))
+
+    # Asumimos que todos los cursos tienen el mismo precio base.
+    unit_price = courses[0].price
+    offers = OfferService.get_active_offers()
+    calc = OfferService.calculate_total_with_offers(len(courses), unit_price, offers)
+    total_amount = calc["total"]
+
+    form = PurchaseForm()
+
+    if request.method == 'POST' and form.validate():
+        # Crear usuario
+        user = UserService.create_user(
+            name=form.name.data,
+            email=form.email.data,
+            phone=form.phone.data
+        )
+
+        # Creamos un pago genérico de pack: guardamos el primer curso solo como referencia.
+        main_course_id = courses[0].id if courses else None
+        payment = PaymentService.create_payment(user.id, main_course_id, total_amount)
+
+        # En un futuro se podría guardar el detalle de cursos del pack en otra tabla.
+        return redirect(url_for('payment.process_payment', payment_id=payment.id))
+
+    return render_template(
+        'payment/cart_buy.html',
+        courses=courses,
+        total_amount=total_amount,
+        form=form,
+    )
 
 # ========== RUTAS DE REDSYS ==========
 

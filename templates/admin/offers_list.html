@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Ofertas{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Gestión de Ofertas</h1>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Dashboard</a>
+            <a href="{{ url_for('admin.offer_new') }}" class="btn btn-primary">Nueva Oferta</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('admin.courses_list') }}" class="nav-link">Cursos</a>
+        <a href="{{ url_for('admin.offers_list') }}" class="nav-link active">Ofertas</a>
+        <a href="{{ url_for('admin.buyers_list') }}" class="nav-link">Compradores</a>
+        <a href="{{ url_for('admin.payment_gateway') }}" class="nav-link">Pasarela de Pago</a>
+    </div>
+
+    {% if offers %}
+    <div class="table-container">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cantidad</th>
+                    <th>Precio pack</th>
+                    <th>Descripción</th>
+                    <th>Activa</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for offer in offers %}
+                <tr>
+                    <td>{{ offer.id }}</td>
+                    <td>{{ offer.quantity }}</td>
+                    <td>{{ "%.2f"|format(offer.price) }} €</td>
+                    <td>{{ offer.description or '-' }}</td>
+                    <td>
+                        {% if offer.is_active %}
+                            <span class="badge badge-success">Sí</span>
+                        {% else %}
+                            <span class="badge badge-warning">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.offer_edit', offer_id=offer.id) }}" class="btn btn-small">Editar</a>
+                        <form method="POST" action="{{ url_for('admin.offer_delete', offer_id=offer.id) }}" style="display:inline;" onsubmit="return confirm('¿Estás seguro de eliminar esta oferta?');">
+                            <button type="submit" class="btn btn-small btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay ofertas configuradas. <a href="{{ url_for('admin.offer_new') }}">Crear primera oferta</a></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

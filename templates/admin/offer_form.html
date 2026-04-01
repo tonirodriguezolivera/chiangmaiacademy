@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>{{ title }}</h1>
+        <div class="admin-actions">
+            <a href="{{ url_for('admin.offers_list') }}" class="btn btn-secondary">Volver a ofertas</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link">Dashboard</a>
+        <a href="{{ url_for('admin.courses_list') }}" class="nav-link">Cursos</a>
+        <a href="{{ url_for('admin.offers_list') }}" class="nav-link active">Ofertas</a>
+        <a href="{{ url_for('admin.buyers_list') }}" class="nav-link">Compradores</a>
+        <a href="{{ url_for('admin.payment_gateway') }}" class="nav-link">Pasarela de Pago</a>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="quantity">Cantidad de cursos</label>
+            {{ form.quantity(class="form-control", id="quantity") }}
+            {% for error in form.quantity.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="price">Precio del pack (€)</label>
+            {{ form.price(class="form-control", id="price") }}
+            {% for error in form.price.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción (opcional)</label>
+            {{ form.description(class="form-control", id="description") }}
+            {% for error in form.description.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label class="checkbox-label">
+                {{ form.is_active() }}
+                <span>Oferta activa</span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -2,12 +2,26 @@
 from flask import render_template, request, redirect, url_for, flash
 from . import bp
 from services.course_service import CourseService
+from services.offer_service import OfferService
+from models import Offer
 
 @bp.route('/')
 def index():
     """Landing page principal"""
     courses = CourseService.get_active_courses()
-    return render_template('index.html', courses=courses)
+    offers = OfferService.get_active_offers()
+    # Convertimos las ofertas a estructuras simples para poder serializarlas a JSON en la plantilla
+    offers_data = [
+        {
+            "id": offer.id,
+            "quantity": offer.quantity,
+            "price": offer.price,
+            "description": offer.description,
+            "is_active": offer.is_active,
+        }
+        for offer in offers
+    ]
+    return render_template('index.html', courses=courses, offers=offers_data)
 
 @bp.route('/el-curso')
 def el_curso():
